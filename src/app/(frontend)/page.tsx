@@ -213,13 +213,28 @@ export default async function HomePage() {
     { label: 'Stack', value: skills.length.toString().padStart(2, '0') },
     { label: 'Athlete', value: 'Pro' },
   ]
+  const terminalLines = settings.terminalLines?.length
+    ? settings.terminalLines.map((l) => l.text)
+    : ['$ pnpm dev', 'clean interfaces', 'train, ship, repeat']
+  const dashboardSignals = settings.dashboardSignals?.length
+    ? settings.dashboardSignals.map((s) => ({ label: s.label, value: s.value }))
+    : [{ label: 'CMS', value: 'Payload' }, { label: 'Build', value: 'Next.js' }, { label: 'Status', value: 'Live' }]
+  const tickerItems = settings.tickerItems?.length
+    ? settings.tickerItems.map((t) => t.text)
+    : ['Developer', 'Professional volleyball', 'Clean interfaces', 'CMS workflows', 'Product thinking']
 
   return (
     <main className="site-shell">
       <Header
-        adminHref={payloadConfig.routes.admin}
-        email={settings.email}
-        isLoggedIn={Boolean(user)}
+        contact={{
+          availability: settings.availability,
+          email: settings.email,
+          location: settings.location,
+          name: settings.name,
+          resumeUrl: settings.resumeUrl,
+          siteName: settings.siteName,
+          socialLinks: settings.socialLinks,
+        }}
         siteName={settings.siteName}
       />
 
@@ -235,18 +250,12 @@ export default async function HomePage() {
         <div className="hero-scrim" />
         <div className="hero-grid" aria-hidden="true" />
         <div className="signal-stack" aria-hidden="true">
-          <div className="signal-card">
-            <span>CMS</span>
-            <strong>Payload</strong>
-          </div>
-          <div className="signal-card">
-            <span>Build</span>
-            <strong>Next.js</strong>
-          </div>
-          <div className="signal-card">
-            <span>Status</span>
-            <strong>Live</strong>
-          </div>
+          {dashboardSignals.map((card) => (
+            <div className="signal-card" key={card.label}>
+              <span>{card.label}</span>
+              <strong>{card.value}</strong>
+            </div>
+          ))}
         </div>
         <div className="hero-content">
           <p className="eyebrow">{settings.availability}</p>
@@ -272,9 +281,9 @@ export default async function HomePage() {
             <span className="terminal-dot" />
             <span className="terminal-dot" />
             <span className="terminal-dot" />
-            <p>$ pnpm dev</p>
-            <p>clean interfaces</p>
-            <p>train, ship, repeat</p>
+            {terminalLines.map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
           </div>
           <div className="stat-grid">
             {heroStats.map((stat) => (
@@ -291,11 +300,16 @@ export default async function HomePage() {
           </div>
         </aside>
         <div className="ticker" aria-hidden="true">
-          <span>Developer</span>
-          <span>Professional volleyball</span>
-          <span>Clean interfaces</span>
-          <span>CMS workflows</span>
-          <span>Product thinking</span>
+          {[0, 1].map((copy) => (
+            <div className="ticker-track" key={copy} aria-hidden={copy === 1 ? 'true' : undefined}>
+              {tickerItems.map((item, i) => (
+                <React.Fragment key={i}>
+                  <span>{item}</span>
+                  <span>·</span>
+                </React.Fragment>
+              ))}
+            </div>
+          ))}
         </div>
       </section>
 
@@ -314,26 +328,15 @@ export default async function HomePage() {
         <ProjectShowcase projects={projects} />
       </section>
 
-      <section className="split-band" id="skills" aria-labelledby="skills-title">
-        <div className="section-heading">
+      <section className="content-band" id="skills" aria-labelledby="skills-title">
+        <div className="section-heading" style={{ textAlign: 'center' }}>
           <p className="eyebrow">Stack</p>
-          <h2 id="skills-title">Tools I build with.</h2>
+          <h2 id="skills-title" style={{ margin: '0 auto' }}>Tools I build with.</h2>
         </div>
         <SkillMatrix skills={skills} />
       </section>
 
-      <section className="content-band writing-band" id="blog" aria-labelledby="blog-title">
-        <div className="section-heading with-action">
-          <div>
-            <p className="eyebrow">Blog</p>
-            <h2 id="blog-title">Notes from code and sport.</h2>
-          </div>
-          <Link href="/blog">All posts</Link>
-        </div>
-        <BlogPreview posts={posts} />
-      </section>
-
-      <section className="content-band" aria-labelledby="experience-title">
+<section className="content-band" aria-labelledby="experience-title">
         <div className="section-heading">
           <p className="eyebrow">Experience</p>
           <h2 id="experience-title">Work across code and sport.</h2>

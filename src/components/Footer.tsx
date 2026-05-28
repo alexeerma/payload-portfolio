@@ -9,23 +9,32 @@ export function Footer({ settings }: FooterProps) {
 
   return (
     <footer className="site-footer">
-      <div>
-        <p className="eyebrow">Contact</p>
-        <h2>{settings.name || 'Your Name'}</h2>
-        <p>{settings.availability || 'Available for selected projects'}</p>
+      <div className="footer-inner">
+        <div className="footer-left">
+          <p className="eyebrow">Available for work</p>
+          <p className="footer-name">{settings.name || 'Your Name'}</p>
+          <p className="footer-availability">{settings.availability || 'Available for selected projects'}</p>
+        </div>
+
+        <div className="footer-center">
+          {settings.email && (
+            <a href={`mailto:${settings.email}`} className="footer-email">{settings.email}</a>
+          )}
+          {settings.resumeUrl && (
+            <a href={settings.resumeUrl} rel="noreferrer" target="_blank">Resume</a>
+          )}
+          {settings.socialLinks?.map((link) => (
+            <a href={link.url} key={link.id ?? link.url} rel="noreferrer" target="_blank">
+              {link.label}
+            </a>
+          ))}
+        </div>
+
+        <div className="footer-right">
+          <p className="footer-meta">{settings.siteName || 'Developer Portfolio'}</p>
+          <p className="footer-meta">© {year}</p>
+        </div>
       </div>
-      <div className="footer-links">
-        {settings.email && <a href={`mailto:${settings.email}`}>{settings.email}</a>}
-        {settings.resumeUrl && <a href={settings.resumeUrl}>Resume</a>}
-        {settings.socialLinks?.map((link) => (
-          <a href={link.url} key={link.id ?? link.url} rel="noreferrer" target="_blank">
-            {link.label}
-          </a>
-        ))}
-      </div>
-      <p className="footer-meta">
-        {settings.siteName || 'Developer Portfolio'} · {year}
-      </p>
     </footer>
   )
 }

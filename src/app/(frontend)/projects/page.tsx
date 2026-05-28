@@ -73,9 +73,7 @@ export default async function ProjectsPage() {
   return (
     <main className="site-shell interior-page">
       <Header
-        adminHref={payloadConfig.routes.admin}
-        email={settings.email}
-        isLoggedIn={Boolean(user)}
+        contact={{ email: settings.email, name: settings.name, availability: settings.availability, siteName: settings.siteName }}
         siteName={settings.siteName}
       />
 

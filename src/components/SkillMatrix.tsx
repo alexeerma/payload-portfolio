@@ -1,5 +1,3 @@
-import type { CSSProperties } from 'react'
-
 import type { Skill } from '@/payload-types'
 
 type DisplaySkill = Pick<Skill, 'name' | 'category'> & {
@@ -11,32 +9,30 @@ type SkillMatrixProps = {
 }
 
 export function SkillMatrix({ skills }: SkillMatrixProps) {
-  const categories = Array.from(new Set(skills.map((skill) => skill.category)))
+  const reversed = [...skills].reverse()
 
   return (
-    <div className="skill-matrix">
-      {categories.map((category) => (
-        <section className="stack-group" key={category} aria-labelledby={`stack-${category}`}>
-          <h3 id={`stack-${category}`}>{category}</h3>
-          <div className="stack-list">
-            {skills
-              .filter((skill) => skill.category === category)
-              .map((skill, index) => (
-                <span
-                  className="stack-pill"
-                  key={skill.id ?? skill.name}
-                  style={{ '--skill-index': index } as CSSProperties}
-                >
+    <div className="skill-scroll-wrap">
+      {[
+        { items: skills, reverse: false },
+        { items: reversed, reverse: true },
+      ].map(({ items, reverse }, rowIndex) => (
+        <div className={`skill-scroll-row${reverse ? ' reverse' : ''}`} key={rowIndex}>
+          {[0, 1, 2].map((copy) => (
+            <div
+              className="skill-scroll-track"
+              key={copy}
+              aria-hidden={copy > 0 ? 'true' : undefined}
+            >
+              {items.map((skill) => (
+                <span className="skill-pill" key={skill.id ?? skill.name}>
                   {skill.name}
                 </span>
               ))}
-          </div>
-        </section>
+            </div>
+          ))}
+        </div>
       ))}
-      <div className="stack-note">
-        <span>Simple stack overview</span>
-        <p>No ratings. No percentages. Just the tools I like building with.</p>
-      </div>
     </div>
   )
 }

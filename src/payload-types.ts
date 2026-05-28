@@ -643,6 +643,34 @@ export interface SiteSetting {
       }[]
     | null;
   featuredProjects?: (number | Project)[] | null;
+  /**
+   * Lines shown in the terminal widget on the hero. First line is styled as a command.
+   */
+  terminalLines?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The small stat cards in the hero dashboard widget.
+   */
+  dashboardSignals?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Words that scroll across the bottom of the hero section.
+   */
+  tickerItems?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -669,6 +697,25 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   featuredProjects?: T;
+  terminalLines?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  dashboardSignals?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  tickerItems?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

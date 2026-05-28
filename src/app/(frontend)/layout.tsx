@@ -3,6 +3,7 @@ import './styles.css'
 
 export const metadata = {
   description: 'A developer portfolio powered by Payload CMS.',
+  icons: { icon: '/favicon.svg' },
   title: 'Developer Portfolio',
 }
 

@@ -92,5 +92,39 @@ export const SiteSettings: GlobalConfig = {
       hasMany: true,
       relationTo: 'projects',
     },
+    {
+      name: 'terminalLines',
+      type: 'array',
+      label: 'Dashboard Terminal Lines',
+      admin: {
+        description: 'Lines shown in the terminal widget on the hero. First line is styled as a command.',
+        initCollapsed: true,
+      },
+      fields: [{ name: 'text', type: 'text', required: true }],
+    },
+    {
+      name: 'dashboardSignals',
+      type: 'array',
+      label: 'Dashboard Signal Cards',
+      admin: {
+        description: 'The small stat cards in the hero dashboard widget.',
+        initCollapsed: true,
+      },
+      fields: [
+        { name: 'label', type: 'text', required: true },
+        { name: 'value', type: 'text', required: true },
+      ],
+      maxRows: 3,
+    },
+    {
+      name: 'tickerItems',
+      type: 'array',
+      label: 'Ticker Items',
+      admin: {
+        description: 'Words that scroll across the bottom of the hero section.',
+        initCollapsed: true,
+      },
+      fields: [{ name: 'text', type: 'text', required: true }],
+    },
   ],
 }
