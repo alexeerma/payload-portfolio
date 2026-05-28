@@ -1,3 +1,4 @@
+import path from 'path'
 import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
@@ -17,6 +18,7 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
+    staticDir: process.env.PAYLOAD_MEDIA_DIR || path.join(process.cwd(), 'public/media'),
     adminThumbnail: 'thumbnail',
     focalPoint: true,
     imageSizes: [
