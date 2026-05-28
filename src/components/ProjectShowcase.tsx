@@ -1,5 +1,6 @@
 'use client'
 
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
 
@@ -120,7 +121,7 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
           const isActive = activeProject && projectId === (activeProject.id ?? activeProject.title)
 
           return (
-            <article
+            <TiltCard
               className="project-card"
               data-active={isActive ? 'true' : 'false'}
               key={projectId}
@@ -143,10 +144,33 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                   ))}
                 </ul>
               )}
-            </article>
+            </TiltCard>
           )
         })}
       </div>
     </div>
+  )
+}
+
+function TiltCard({ children, className, style, ...props }: React.HTMLAttributes<HTMLElement>) {
+  const rx = useMotionValue(0)
+  const ry = useMotionValue(0)
+  const srx = useSpring(rx, { stiffness: 280, damping: 28 })
+  const sry = useSpring(ry, { stiffness: 280, damping: 28 })
+
+  return (
+    <motion.article
+      className={className}
+      style={{ ...style, rotateX: srx, rotateY: sry, transformStyle: 'preserve-3d', transformPerspective: 800 } as React.CSSProperties}
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect()
+        rx.set((e.clientY - rect.top - rect.height / 2) / rect.height * -7)
+        ry.set((e.clientX - rect.left - rect.width / 2) / rect.width * 7)
+      }}
+      onMouseLeave={() => { rx.set(0); ry.set(0) }}
+      {...props}
+    >
+      {children}
+    </motion.article>
   )
 }

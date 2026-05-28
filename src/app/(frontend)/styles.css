@@ -87,6 +87,73 @@ h3 {
   line-height: 1.12;
 }
 
+/* Scroll progress bar */
+.scroll-progress {
+  background: linear-gradient(90deg, var(--blue), var(--mint), #bf5af2);
+  height: 2px;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transform-origin: left center;
+  z-index: 200;
+}
+
+/* Cursor glow */
+.cursor-glow {
+  background: radial-gradient(circle, rgba(0, 122, 255, 0.1) 0%, rgba(52, 199, 89, 0.04) 40%, transparent 70%);
+  border-radius: 50%;
+  height: 700px;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  z-index: 1;
+}
+
+/* Floating orbs */
+.floating-orbs {
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -3;
+}
+
+.orb {
+  border-radius: 50%;
+  filter: blur(90px);
+  position: absolute;
+}
+
+.orb-blue {
+  background: rgba(0, 122, 255, 0.14);
+  height: 480px;
+  left: 8%;
+  top: 15%;
+  width: 480px;
+}
+
+.orb-mint {
+  background: rgba(52, 199, 89, 0.1);
+  height: 420px;
+  right: 12%;
+  top: 35%;
+  width: 420px;
+}
+
+.orb-purple {
+  background: rgba(191, 90, 242, 0.09);
+  bottom: 10%;
+  height: 360px;
+  left: 35%;
+  width: 360px;
+}
+
 .site-shell {
   background:
     linear-gradient(180deg, #ffffff 0, var(--canvas) 42rem),
@@ -134,8 +201,8 @@ h3 {
 .nav-right {
   align-items: center;
   display: flex;
-  gap: 6px;
-  padding: 0 16px;
+  gap: 25px;
+  padding: 5px 26px;
 }
 
 .nav-left {
@@ -155,18 +222,15 @@ h3 {
   text-decoration: none;
 }
 
-.brand::before {
-  background: linear-gradient(135deg, var(--blue), var(--mint));
-  border-radius: 3px;
-  content: '';
-  height: 12px;
-  width: 12px;
+.brand-logo {
+  border-radius: 6px;
+  display: block;
+  height: 32px;
+  width: 32px;
 }
 
-.nav-left a,
-.nav-right a,
+.nav-link,
 .contact-trigger {
-  background: transparent;
   border: 0;
   border-radius: 999px;
   color: var(--secondary);
@@ -175,18 +239,14 @@ h3 {
   padding: 8px 12px;
   text-decoration: none;
   transition:
-    background 180ms ease,
     color 180ms ease,
     transform 180ms ease;
 }
 
-.nav-left a:hover,
-.nav-left a:focus-visible,
-.nav-right a:hover,
-.nav-right a:focus-visible,
+.nav-link:hover,
+.nav-link:focus-visible,
 .contact-trigger:hover,
 .contact-trigger:focus-visible {
-  background: rgba(0, 122, 255, 0.1);
   color: var(--blue);
   transform: translateY(-1px);
 }
@@ -374,21 +434,24 @@ h3 {
 }
 
 .form-submit {
-  background: var(--blue);
-  border: 0;
+  border: 1px solid rgba(0, 122, 255, 0.3);
   border-radius: 999px;
-  color: #fff;
+  color: var(--blue);
   font-size: 0.95rem;
   font-weight: 760;
   justify-self: start;
   padding: 13px 28px;
   transition:
+    border-color 180ms ease,
     box-shadow 180ms ease,
+    color 180ms ease,
     transform 180ms ease;
 }
 
 .form-submit:hover {
-  box-shadow: 0 12px 32px rgba(0, 122, 255, 0.32);
+  border-color: var(--blue);
+  box-shadow: 0 12px 32px rgba(0, 122, 255, 0.18);
+  color: var(--blue);
   transform: translateY(-2px);
 }
 
@@ -498,17 +561,12 @@ h3 {
 }
 
 .hero-content h1 {
-  animation: reveal-up 650ms ease both, gradient-shift 7s ease-in-out infinite alternate;
+  animation: gradient-shift 7s ease-in-out infinite alternate;
   background: linear-gradient(135deg, var(--ink) 0%, #1a56ff 35%, #34c759 62%, #bf5af2 85%, var(--ink) 100%);
   background-clip: text;
   background-size: 250% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-.hero-content .headline {
-  animation: reveal-up 650ms ease both;
-  animation-delay: 120ms;
 }
 
 .eyebrow {
@@ -540,13 +598,25 @@ h3 {
   gap: 10px;
 }
 
+.btn-glow,
+.hero-meta span,
+.hero-meta a,
+.link-row a,
+.nav-link,
+.contact-trigger,
+.section-heading.with-action a,
+.back-link,
+.overlay-links a,
+.form-submit {
+  animation: gradient-shift 7s ease-in-out infinite alternate;
+  background: linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(0,122,255,0.07) 35%, rgba(52,199,89,0.07) 62%, rgba(191,90,242,0.05) 85%, rgba(255,255,255,0.88) 100%);
+  background-size: 250% auto;
+}
+
 .hero-meta span,
 .hero-meta a,
 .link-row a {
-  animation: gradient-shift 7s ease-in-out infinite alternate;
   backdrop-filter: blur(18px) saturate(180%);
-  background: linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(0,122,255,0.07) 35%, rgba(52,199,89,0.07) 62%, rgba(191,90,242,0.05) 85%, rgba(255,255,255,0.88) 100%);
-  background-size: 250% auto;
   border: 1px solid rgba(29, 29, 31, 0.08);
   border-radius: 999px;
   box-shadow: 0 8px 22px rgba(29, 29, 31, 0.06);
@@ -577,8 +647,6 @@ h3 {
 }
 
 .hero-dashboard {
-  animation: dashboard-enter 700ms ease both;
-  animation-delay: 180ms;
   backdrop-filter: blur(34px) saturate(180%);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.68)),
@@ -819,11 +887,13 @@ h3 {
   color: var(--blue);
   font-size: 0.9rem;
   font-weight: 760;
+  justify-self: start;
   padding: 9px 14px;
   text-decoration: none;
   transition:
     box-shadow 180ms ease,
     transform 180ms ease;
+  width: fit-content;
 }
 
 .section-heading.with-action a:hover,
@@ -1201,13 +1271,34 @@ h3 {
   border-radius: 8px;
   box-shadow: 0 12px 36px rgba(29, 29, 31, 0.05);
   display: grid;
-  gap: 18px;
   min-height: 100%;
-  padding: 22px;
+  overflow: hidden;
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease,
     transform 180ms ease;
+}
+
+.blog-card-image {
+  aspect-ratio: 16 / 9;
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+
+.blog-card-image img {
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.blog-card:hover .blog-card-image img {
+  transform: scale(1.04);
+}
+
+.blog-card-body {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
 }
 
 .blog-card:hover,
@@ -1631,18 +1722,26 @@ h3 {
   .site-header {
     gap: 2px;
     left: 50%;
-    max-width: calc(100vw - 24px);
+    min-width: 0;
     padding: 5px 6px;
+    width: calc(100vw - 24px);
   }
 
-  .nav-left a,
-  .nav-right a,
+  .nav-left,
+  .nav-right {
+    gap: 2px;
+    padding: 0 6px;
+  }
+
+  .nav-link,
   .contact-trigger {
+    font-size: 0.78rem;
     padding: 7px 8px;
   }
 
   .overlay-panel {
     grid-template-columns: 1fr;
+    max-height: 85svh;
   }
 
   .overlay-info {
@@ -1653,6 +1752,10 @@ h3 {
 
   .overlay-form-wrap {
     padding: 28px;
+  }
+
+  .skill-scroll-wrap {
+    max-width: 100%;
   }
 
   .hero-content {

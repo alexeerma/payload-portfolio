@@ -634,6 +634,10 @@ export interface SiteSetting {
   location?: string | null;
   email?: string | null;
   resumeUrl?: string | null;
+  /**
+   * Logo shown in the site header. Replaces the default icon.
+   */
+  logo?: (number | null) | Media;
   heroImage?: (number | null) | Media;
   socialLinks?:
     | {
@@ -688,6 +692,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   location?: T;
   email?: T;
   resumeUrl?: T;
+  logo?: T;
   heroImage?: T;
   socialLinks?:
     | T

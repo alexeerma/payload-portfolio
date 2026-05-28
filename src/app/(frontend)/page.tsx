@@ -1,16 +1,23 @@
 import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
 import Link from 'next/link'
 import { getPayload, type Payload } from 'payload'
 import React from 'react'
 
-import { BlogPreview } from '@/components/BlogPreview'
+import { AnimateIn } from '@/components/AnimateIn'
+import { AnimatedTimeline } from '@/components/AnimatedTimeline'
+import { CursorGlow } from '@/components/CursorGlow'
+import { FloatingOrbs } from '@/components/FloatingOrbs'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { HeroContent } from '@/components/HeroContent'
+import { HeroDashboard } from '@/components/HeroDashboard'
+import { MagneticLink } from '@/components/Magnetic'
+import { ParallaxHeroImage } from '@/components/ParallaxHeroImage'
 import { ProjectShowcase } from '@/components/ProjectShowcase'
+import { ScrollProgress } from '@/components/ScrollProgress'
 import { SkillMatrix } from '@/components/SkillMatrix'
 import config from '@/payload.config'
-import type { Experience, Media, Post, Project, SiteSetting, Skill } from '@/payload-types'
+import type { Experience, Media, Project, SiteSetting, Skill } from '@/payload-types'
 import './styles.css'
 
 type DisplayProject = Pick<Project, 'title' | 'summary' | 'liveUrl' | 'repoUrl' | 'projectStatus'> & {
@@ -31,9 +38,6 @@ type DisplayExperience = Pick<
   id?: number | string
 }
 
-type DisplayPost = Pick<Post, 'title' | 'slug' | 'excerpt' | 'publishedAt' | 'readTime' | 'tags'> & {
-  id?: number | string
-}
 
 const fallbackProjects: DisplayProject[] = [
   {
@@ -95,26 +99,6 @@ const fallbackExperience: DisplayExperience[] = [
   },
 ]
 
-const fallbackPosts: DisplayPost[] = [
-  {
-    title: 'Training Habits That Help Me Build Better',
-    slug: 'training-habits-that-help-me-build-better',
-    excerpt:
-      'How structure, repetition, and honest feedback from volleyball carry into product work.',
-    publishedAt: '2026-05-01T00:00:00.000Z',
-    readTime: '3 min read',
-    tags: [{ label: 'Process' }, { label: 'Sport' }],
-  },
-  {
-    title: 'Keeping a Portfolio Simple',
-    slug: 'keeping-a-portfolio-simple',
-    excerpt:
-      'A few notes on clean sections, editable content, and avoiding unnecessary visual noise.',
-    publishedAt: '2026-04-18T00:00:00.000Z',
-    readTime: '4 min read',
-    tags: [{ label: 'Design' }, { label: 'CMS' }],
-  },
-]
 
 const defaultSettings: Partial<SiteSetting> = {
   availability: 'Available for selected projects',
@@ -136,16 +120,6 @@ function getMediaUrl(media: Media | number | string | null | undefined) {
   return null
 }
 
-function formatDateRange(experience: DisplayExperience) {
-  const start = new Date(experience.startDate).getFullYear()
-  const end = experience.current
-    ? 'Present'
-    : experience.endDate
-      ? new Date(experience.endDate).getFullYear()
-      : 'Present'
-
-  return `${start} - ${end}`
-}
 
 async function getSiteSettings(payload: Payload) {
   try {
@@ -164,7 +138,7 @@ export default async function HomePage() {
   const payload = await getPayload({ config: payloadConfig })
   const { user } = await payload.auth({ headers })
 
-  const [settingsResult, projectsResult, skillsResult, experienceResult, postsResult] =
+  const [settingsResult, projectsResult, skillsResult, experienceResult] =
     await Promise.all([
     getSiteSettings(payload),
     payload.find({
@@ -189,25 +163,14 @@ export default async function HomePage() {
       limit: 5,
       sort: 'sortOrder',
     }),
-    payload.find({
-      collection: 'posts',
-      depth: 1,
-      limit: 3,
-      sort: '-publishedAt',
-      where: {
-        featured: {
-          equals: true,
-        },
-      },
-    }),
   ])
 
   const settings = { ...defaultSettings, ...settingsResult }
   const projects = projectsResult.docs.length ? projectsResult.docs : fallbackProjects
   const skills = skillsResult.docs.length ? skillsResult.docs : fallbackSkills
   const experience = experienceResult.docs.length ? experienceResult.docs : fallbackExperience
-  const posts = postsResult.docs.length ? postsResult.docs : fallbackPosts
   const heroImage = getMediaUrl(settings.heroImage) || '/portfolio-hero.png'
+  const logoUrl = getMediaUrl(settings.logo)
   const heroStats = [
     { label: 'Projects', value: projects.length.toString().padStart(2, '0') },
     { label: 'Stack', value: skills.length.toString().padStart(2, '0') },
@@ -225,6 +188,8 @@ export default async function HomePage() {
 
   return (
     <main className="site-shell">
+      <CursorGlow />
+      <ScrollProgress />
       <Header
         contact={{
           availability: settings.availability,
@@ -235,70 +200,29 @@ export default async function HomePage() {
           siteName: settings.siteName,
           socialLinks: settings.socialLinks,
         }}
+        logoUrl={logoUrl}
         siteName={settings.siteName}
       />
 
       <section className="hero" aria-labelledby="intro-title">
-        <Image
-          alt=""
-          className="hero-image"
-          fill
-          loading="eager"
-          sizes="100vw"
-          src={heroImage}
-        />
+        <ParallaxHeroImage src={heroImage} />
+        <FloatingOrbs />
         <div className="hero-scrim" />
         <div className="hero-grid" aria-hidden="true" />
-        <div className="signal-stack" aria-hidden="true">
-          {dashboardSignals.map((card) => (
-            <div className="signal-card" key={card.label}>
-              <span>{card.label}</span>
-              <strong>{card.value}</strong>
-            </div>
-          ))}
-        </div>
-        <div className="hero-content">
-          <p className="eyebrow">{settings.availability}</p>
-          <h1 id="intro-title">{settings.name}</h1>
-          <p className="role">{settings.title}</p>
-          <p className="headline">{settings.headline}</p>
-          <div className="hero-meta">
-            {settings.location && <span>{settings.location}</span>}
-            {settings.resumeUrl && <a href={settings.resumeUrl}>Resume</a>}
-            {settings.socialLinks?.map((link) => (
-              <a href={link.url} key={link.id ?? link.url} rel="noreferrer" target="_blank">
-                {link.label}
-              </a>
-            ))}
-          </div>
-        </div>
-        <aside className="hero-dashboard" aria-hidden="true">
-          <div className="dashboard-topline">
-            <span>portfolio://developer-athlete</span>
-            <strong>Available</strong>
-          </div>
-          <div className="terminal-window">
-            <span className="terminal-dot" />
-            <span className="terminal-dot" />
-            <span className="terminal-dot" />
-            {terminalLines.map((line, i) => (
-              <p key={i}>{line}</p>
-            ))}
-          </div>
-          <div className="stat-grid">
-            {heroStats.map((stat) => (
-              <div key={stat.label}>
-                <strong>{stat.value}</strong>
-                <span>{stat.label}</span>
-              </div>
-            ))}
-          </div>
-          <div className="signal-meter">
-            <span />
-            <span />
-            <span />
-          </div>
-        </aside>
+        <HeroContent
+          availability={settings.availability}
+          headline={settings.headline}
+          location={settings.location}
+          name={settings.name}
+          resumeUrl={settings.resumeUrl}
+          role={settings.title}
+          socialLinks={settings.socialLinks}
+        />
+        <HeroDashboard
+          dashboardSignals={dashboardSignals}
+          heroStats={heroStats}
+          terminalLines={terminalLines}
+        />
         <div className="ticker" aria-hidden="true">
           {[0, 1].map((copy) => (
             <div className="ticker-track" key={copy} aria-hidden={copy === 1 ? 'true' : undefined}>
@@ -313,58 +237,45 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="intro-section" aria-label="Profile">
-        <p>{settings.intro}</p>
-      </section>
+      <AnimateIn>
+        <section className="intro-section" aria-label="Profile">
+          <p>{settings.intro}</p>
+        </section>
+      </AnimateIn>
 
       <section className="content-band" id="projects" aria-labelledby="projects-title">
-        <div className="section-heading with-action">
-          <div>
-            <p className="eyebrow">Selected Work</p>
-            <h2 id="projects-title">Projects built to be used.</h2>
+        <AnimateIn>
+          <div className="section-heading with-action">
+            <div>
+              <p className="eyebrow">Selected Work</p>
+              <h2 id="projects-title">Projects built to be used.</h2>
+            </div>
+            <MagneticLink href="/projects">All projects</MagneticLink>
           </div>
-          <Link href="/projects">All projects</Link>
-        </div>
-        <ProjectShowcase projects={projects} />
+        </AnimateIn>
+        <AnimateIn delay={0.1}>
+          <ProjectShowcase projects={projects} />
+        </AnimateIn>
       </section>
 
       <section className="content-band" id="skills" aria-labelledby="skills-title">
-        <div className="section-heading" style={{ textAlign: 'center' }}>
-          <p className="eyebrow">Stack</p>
-          <h2 id="skills-title" style={{ margin: '0 auto' }}>Tools I build with.</h2>
-        </div>
+        <AnimateIn>
+          <div className="section-heading" style={{ textAlign: 'center' }}>
+            <p className="eyebrow">Stack</p>
+            <h2 id="skills-title" style={{ margin: '0 auto' }}>Tools I build with.</h2>
+          </div>
+        </AnimateIn>
         <SkillMatrix skills={skills} />
       </section>
 
-<section className="content-band" aria-labelledby="experience-title">
-        <div className="section-heading">
-          <p className="eyebrow">Experience</p>
-          <h2 id="experience-title">Work across code and sport.</h2>
-        </div>
-        <div className="timeline">
-          {experience.map((item) => (
-            <article className="timeline-item" key={item.id ?? `${item.company}-${item.role}`}>
-              <div>
-                <p className="date-range">{formatDateRange(item)}</p>
-                <h3>{item.role}</h3>
-                <p className="company">
-                  {item.company}
-                  {item.location ? `, ${item.location}` : ''}
-                </p>
-              </div>
-              <div>
-                <p>{item.summary}</p>
-                {!!item.highlights?.length && (
-                  <ul className="highlight-list">
-                    {item.highlights.slice(0, 3).map((highlight) => (
-                      <li key={highlight.id ?? highlight.item}>{highlight.item}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
+      <section className="content-band" aria-labelledby="experience-title">
+        <AnimateIn>
+          <div className="section-heading">
+            <p className="eyebrow">Experience</p>
+            <h2 id="experience-title">Work across code and sport.</h2>
+          </div>
+        </AnimateIn>
+        <AnimatedTimeline items={experience} />
       </section>
 
       <Footer settings={settings} />

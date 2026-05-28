@@ -75,6 +75,7 @@ export default async function ProjectsPage() {
       <Header
         contact={{ email: settings.email, name: settings.name, availability: settings.availability, siteName: settings.siteName }}
         siteName={settings.siteName}
+        logoUrl={typeof settings.logo === 'object' && settings.logo && 'url' in settings.logo ? settings.logo.url : null}
       />
 
       <section className="page-hero" aria-labelledby="projects-page-title">

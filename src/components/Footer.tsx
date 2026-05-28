@@ -11,17 +11,14 @@ export function Footer({ settings }: FooterProps) {
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-left">
-          <p className="eyebrow">Available for work</p>
           <p className="footer-name">{settings.name || 'Your Name'}</p>
-          <p className="footer-availability">{settings.availability || 'Available for selected projects'}</p>
         </div>
 
         <div className="footer-center">
-          {settings.email && (
-            <a href={`mailto:${settings.email}`} className="footer-email">{settings.email}</a>
-          )}
           {settings.resumeUrl && (
-            <a href={settings.resumeUrl} rel="noreferrer" target="_blank">Resume</a>
+            <a href={settings.resumeUrl} rel="noreferrer" target="_blank">
+              Resume
+            </a>
           )}
           {settings.socialLinks?.map((link) => (
             <a href={link.url} key={link.id ?? link.url} rel="noreferrer" target="_blank">
@@ -32,7 +29,7 @@ export function Footer({ settings }: FooterProps) {
 
         <div className="footer-right">
           <p className="footer-meta">{settings.siteName || 'Developer Portfolio'}</p>
-          <p className="footer-meta">© {year}</p>
+          <p className="footer-meta">All rights reserved © {year}</p>
         </div>
       </div>
     </footer>

@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { headers as getHeaders } from 'next/headers.js'
+import { MagneticLink } from '@/components/Magnetic'
 import { notFound } from 'next/navigation'
 import { getPayload, type Payload } from 'payload'
 
@@ -87,12 +88,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <Header
         contact={{ email: settings.email, name: settings.name, availability: settings.availability, siteName: settings.siteName }}
         siteName={settings.siteName}
+        logoUrl={typeof settings.logo === 'object' && settings.logo && 'url' in settings.logo ? settings.logo.url : null}
       />
 
       <article className="post-shell">
-        <Link className="back-link" href="/blog">
+        <MagneticLink className="back-link" href="/blog">
           Back to blog
-        </Link>
+        </MagneticLink>
         <header className="post-header">
           <div className="blog-card-meta">
             <span>{formatPostDate(post.publishedAt)}</span>

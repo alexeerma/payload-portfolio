@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 100 600 600">
+  <rect x="100" y="100" width="600" height="600" rx="80" fill="#1a1d23"/>
+
+  <!-- A: triangle outline + crossbar -->
+  <g stroke="white" stroke-width="28" fill="none" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M 250 495 L 325 295 L 400 495"/>
+    <line x1="272" y1="425" x2="378" y2="425"/>
+  </g>
+
+  <!-- E: vertical + 3 horizontals -->
+  <g stroke="white" stroke-width="28" fill="none" stroke-linecap="square">
+    <line x1="430" y1="295" x2="430" y2="495"/>
+    <line x1="430" y1="295" x2="550" y2="295"/>
+    <line x1="430" y1="395" x2="535" y2="395"/>
+    <line x1="430" y1="495" x2="550" y2="495"/>
+  </g>
+</svg>

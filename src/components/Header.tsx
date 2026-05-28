@@ -1,6 +1,8 @@
-import Link from 'next/link'
+'use client'
 
+import Image from 'next/image'
 import { ContactOverlay } from './ContactOverlay'
+import { MagneticLink } from './Magnetic'
 
 type ContactInfo = {
   availability?: string | null
@@ -16,26 +18,27 @@ type HeaderProps = {
   adminHref?: string
   contact?: ContactInfo
   isLoggedIn?: boolean
+  logoUrl?: string | null
   siteName?: string | null
 }
 
-export function Header({ contact, siteName }: HeaderProps) {
+export function Header({ contact, logoUrl }: HeaderProps) {
+  const logo = logoUrl || '/aelogo.svg'
+
   return (
     <header className="site-header">
       <nav className="nav-left" aria-label="Primary left">
-        <Link href="/projects">Projects</Link>
-        <Link href="/#skills">Stack</Link>
+        <MagneticLink href="/projects" className="nav-link">Projects</MagneticLink>
+        <MagneticLink href="/#skills" className="nav-link">Stack</MagneticLink>
       </nav>
 
-      <Link aria-label="Home" className="brand" href="/" />
+      <MagneticLink aria-label="Home" className="brand" href="/">
+        <Image alt="Logo" className="brand-logo" height={32} src={logo} width={32} unoptimized />
+      </MagneticLink>
 
       <nav className="nav-right" aria-label="Primary right">
-        <Link href="/blog">Blog</Link>
-        {contact ? (
-          <ContactOverlay contact={contact} />
-        ) : (
-          contact?.email && <a href={`mailto:${contact.email}`}>Contact</a>
-        )}
+        <MagneticLink href="/blog" className="nav-link">Blog</MagneticLink>
+        {contact && <ContactOverlay contact={contact} />}
       </nav>
     </header>
   )

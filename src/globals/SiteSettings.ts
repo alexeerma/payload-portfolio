@@ -63,6 +63,14 @@ export const SiteSettings: GlobalConfig = {
       type: 'text',
     },
     {
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Logo shown in the site header. Replaces the default icon.',
+      },
+    },
+    {
       name: 'heroImage',
       type: 'upload',
       relationTo: 'media',

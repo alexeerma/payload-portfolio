@@ -2,6 +2,7 @@
 
 import { createPortal } from 'react-dom'
 import { useEffect, useRef, useState } from 'react'
+import { MagneticButton, MagneticLink } from './Magnetic'
 
 type ContactInfo = {
   availability?: string | null
@@ -95,12 +96,12 @@ export function ContactOverlay({ contact }: ContactOverlayProps) {
           {(contact.socialLinks?.length || contact.resumeUrl) && (
             <div className="overlay-links">
               {contact.resumeUrl && (
-                <a href={contact.resumeUrl} rel="noreferrer" target="_blank">Resume</a>
+                <MagneticLink href={contact.resumeUrl} rel="noreferrer" target="_blank">Resume</MagneticLink>
               )}
               {contact.socialLinks?.map((link) => (
-                <a href={link.url} key={link.id ?? link.url} rel="noreferrer" target="_blank">
+                <MagneticLink href={link.url} key={link.id ?? link.url} rel="noreferrer" target="_blank">
                   {link.label}
-                </a>
+                </MagneticLink>
               ))}
             </div>
           )}
@@ -129,7 +130,7 @@ export function ContactOverlay({ contact }: ContactOverlayProps) {
                 <label htmlFor="contact-message">Message</label>
                 <textarea id="contact-message" name="message" placeholder="Tell me about your project…" required rows={5} />
               </div>
-              <button className="form-submit" type="submit">Send message</button>
+              <MagneticButton className="form-submit" type="submit">Send message</MagneticButton>
             </form>
           )}
         </div>
@@ -139,9 +140,9 @@ export function ContactOverlay({ contact }: ContactOverlayProps) {
 
   return (
     <>
-      <button className="contact-trigger" onClick={() => setOpen(true)} type="button">
+      <MagneticButton className="contact-trigger" onClick={() => setOpen(true)}>
         Contact
-      </button>
+      </MagneticButton>
       {typeof document !== 'undefined' && createPortal(overlay, document.body)}
     </>
   )
