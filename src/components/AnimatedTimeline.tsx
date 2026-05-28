@@ -36,7 +36,7 @@ export function AnimatedTimeline({ items }: AnimatedTimelineProps) {
           initial={reduced ? { opacity: 1, x: 0 } : { opacity: 0, x: -18 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : i * 0.08, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
         >
           <div>
             <p className="date-range">{formatDateRange(item)}</p>

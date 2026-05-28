@@ -152,7 +152,12 @@ export function ProjectShowcase({ projects }: ProjectShowcaseProps) {
   )
 }
 
-function TiltCard({ children, className, style, ...props }: React.HTMLAttributes<HTMLElement>) {
+function TiltCard({ children, className, style, 'data-active': dataActive }: {
+  children: React.ReactNode
+  className?: string
+  style?: React.CSSProperties
+  'data-active'?: string
+}) {
   const rx = useMotionValue(0)
   const ry = useMotionValue(0)
   const srx = useSpring(rx, { stiffness: 280, damping: 28 })
@@ -161,6 +166,7 @@ function TiltCard({ children, className, style, ...props }: React.HTMLAttributes
   return (
     <motion.article
       className={className}
+      data-active={dataActive}
       style={{ ...style, rotateX: srx, rotateY: sry, transformStyle: 'preserve-3d', transformPerspective: 800 } as React.CSSProperties}
       onMouseMove={(e) => {
         const rect = e.currentTarget.getBoundingClientRect()
@@ -168,7 +174,6 @@ function TiltCard({ children, className, style, ...props }: React.HTMLAttributes
         ry.set((e.clientX - rect.left - rect.width / 2) / rect.width * 7)
       }}
       onMouseLeave={() => { rx.set(0); ry.set(0) }}
-      {...props}
     >
       {children}
     </motion.article>

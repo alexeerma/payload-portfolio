@@ -22,7 +22,7 @@ const container = {
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18, filter: 'blur(6px)' },
-  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
+  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
 }
 
 function WordSplit({ text, tag = 'span' }: { text: string; tag?: 'h1' | 'span' }) {
@@ -40,7 +40,7 @@ function WordSplit({ text, tag = 'span' }: { text: string; tag?: 'h1' | 'span' }
               show: {
                 y: 0,
                 opacity: 1,
-                transition: { duration: 0.55, delay: i * 0.055, ease: [0.22, 1, 0.36, 1] },
+                transition: { duration: 0.55, delay: i * 0.055, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
               },
             }}
           >

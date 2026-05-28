@@ -34,7 +34,7 @@ export function HeroDashboard({ dashboardSignals, heroStats, terminalLines }: He
       className="hero-dashboard"
       initial={{ opacity: 0, x: 40, rotateY: 4 }}
       animate={{ opacity: 1, x: 0, rotateY: 0 }}
-      transition={{ duration: 0.75, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.75, delay: 0.3, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
       style={{ transformPerspective: 1200 }}
     >
       <div className="dashboard-topline">
@@ -64,7 +64,7 @@ export function HeroDashboard({ dashboardSignals, heroStats, terminalLines }: He
             key={stat.label}
             initial={{ opacity: 0, y: 14, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: 0.65 + i * 0.08, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ delay: 0.65 + i * 0.08, duration: 0.45, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           >
             <CountUp value={stat.value} />
             <span>{stat.label}</span>
