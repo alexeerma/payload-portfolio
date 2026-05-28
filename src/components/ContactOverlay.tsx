@@ -36,16 +36,24 @@ export function ContactOverlay({ contact }: ContactOverlayProps) {
     return () => { document.body.style.overflow = '' }
   }, [open])
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
     const name = data.get('name') as string
     const email = data.get('email') as string
     const message = data.get('message') as string
-    const subject = encodeURIComponent(`Portfolio enquiry from ${name}`)
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)
-    window.location.href = `mailto:${contact.email || ''}?subject=${subject}&body=${body}`
-    setSent(true)
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message }),
+      })
+      if (!res.ok) throw new Error('Failed')
+      setSent(true)
+    } catch {
+      alert('Something went wrong. Please email directly at ' + (contact.email || ''))
+    }
   }
 
   const overlay = open ? (
@@ -110,8 +118,8 @@ export function ContactOverlay({ contact }: ContactOverlayProps) {
         <div className="overlay-form-wrap">
           {sent ? (
             <div className="overlay-sent">
-              <p className="eyebrow">Message ready</p>
-              <h3>Your mail client should have opened.</h3>
+              <p className="eyebrow">Message sent</p>
+              <h3>Thanks, I'll be in touch.</h3>
               <p>If nothing happened, email me directly at <a href={`mailto:${contact.email}`}>{contact.email}</a>.</p>
               <button onClick={() => { setSent(false); setOpen(false) }} type="button">Close</button>
             </div>

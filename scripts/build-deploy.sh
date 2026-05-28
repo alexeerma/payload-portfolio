@@ -18,6 +18,14 @@ cp -r public "$DEPLOY_DIR/public"
 # PM2 config goes in the root of the deployed folder
 cp pm2.config.js "$DEPLOY_DIR/pm2.config.js"
 
+# Copy packages that Next.js standalone sometimes misses
+for pkg in @swc/helpers; do
+  if [ -d "node_modules/$pkg" ]; then
+    mkdir -p "$DEPLOY_DIR/node_modules/$pkg"
+    cp -r "node_modules/$pkg/." "$DEPLOY_DIR/node_modules/$pkg/"
+  fi
+done
+
 echo "→ Creating archive..."
 tar -czf deploy.tar.gz -C "$DEPLOY_DIR" .
 
