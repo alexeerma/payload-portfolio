@@ -32,22 +32,17 @@ jobs:
           SMTP_HOST: smtp.zone.eu
         run: bash scripts/build-deploy.sh
 
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HOST_SERVER_IP }} >> ~/.ssh/known_hosts
+
       - name: Upload to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: deploy.tar.gz
-          target: /data05/virt114532/domeenid/www.alexeerma.ee/htdocs/
+        run: |
+          rsync -vrm deploy.tar.gz ${{ secrets.SSH_LOGIN_CREDS }}:/data05/virt114532/domeenid/www.alexeerma.ee/htdocs/
 
       - name: Extract and restart
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /data05/virt114532/domeenid/www.alexeerma.ee/htdocs
-            tar -xzf deploy.tar.gz -C .
-            pkill -f "node server.js" || true
+        run: |
+          ssh ${{ secrets.SSH_LOGIN_CREDS }} "cd /data05/virt114532/domeenid/www.alexeerma.ee/htdocs && tar -xzf deploy.tar.gz -C . && pkill -f 'node server.js' || true"
