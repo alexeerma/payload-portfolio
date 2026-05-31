@@ -1,4 +1,5 @@
 import { headers as getHeaders } from 'next/headers.js'
+import type { Metadata } from 'next'
 import { getPayload, type Payload } from 'payload'
 
 import { BlogPreview } from '@/components/BlogPreview'
@@ -24,6 +25,16 @@ async function getSiteSettings(payload: Payload) {
   }
 }
 
+export const metadata: Metadata = {
+  title: 'Blog',
+  description: 'Notes on building clean products, CMS workflows, training habits, and the overlap between development and professional volleyball.',
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_SERVER_URL || 'https://alexeerma.ee'}/blog` },
+  openGraph: {
+    title: 'Blog — Aleksander Eerma',
+    url: `${process.env.NEXT_PUBLIC_SERVER_URL || 'https://alexeerma.ee'}/blog`,
+  },
+}
+
 export default async function BlogPage() {
   const headers = await getHeaders()
   const payloadConfig = await config
@@ -43,7 +54,7 @@ export default async function BlogPage() {
   const settings = { ...defaultSettings, ...settingsResult }
 
   return (
-    <main className="site-shell interior-page">
+    <main className="site-shell interior-page" id="main-content">
       <Header
         contact={{ email: settings.email, name: settings.name, availability: settings.availability, siteName: settings.siteName }}
         siteName={settings.siteName}

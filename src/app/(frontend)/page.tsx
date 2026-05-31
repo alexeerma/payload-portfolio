@@ -1,5 +1,6 @@
 import { headers as getHeaders } from 'next/headers.js'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getPayload, type Payload } from 'payload'
 import React from 'react'
 
@@ -11,6 +12,7 @@ import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { HeroContent } from '@/components/HeroContent'
 import { HeroDashboard } from '@/components/HeroDashboard'
+import { PersonJsonLd } from '@/components/JsonLd'
 import { MagneticLink } from '@/components/Magnetic'
 import { ParallaxHeroImage } from '@/components/ParallaxHeroImage'
 import { ProjectShowcase } from '@/components/ProjectShowcase'
@@ -132,6 +134,28 @@ async function getSiteSettings(payload: Payload) {
   }
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const payloadConfig = await config
+  const payload = await getPayload({ config: payloadConfig })
+  const settings = await getSiteSettings(payload)
+  const url = process.env.NEXT_PUBLIC_SERVER_URL || 'https://alexeerma.ee'
+  const title = settings.name && settings.title ? `${settings.name} — ${settings.title}` : 'Developer Portfolio'
+  const description = settings.headline || settings.intro || ''
+  const heroImage = getMediaUrl(settings.heroImage)
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      images: heroImage ? [{ url: heroImage }] : [],
+    },
+  }
+}
+
 export default async function HomePage() {
   const headers = await getHeaders()
   const payloadConfig = await config
@@ -187,7 +211,7 @@ export default async function HomePage() {
     : ['Developer', 'Professional volleyball', 'Clean interfaces', 'CMS workflows', 'Product thinking']
 
   return (
-    <main className="site-shell">
+    <main className="site-shell" id="main-content">
       <CursorGlow />
       <ScrollProgress />
       <Header
@@ -204,7 +228,17 @@ export default async function HomePage() {
         siteName={settings.siteName}
       />
 
+      <PersonJsonLd
+        name={settings.name || 'Aleksander Eerma'}
+        jobTitle={settings.title}
+        url={process.env.NEXT_PUBLIC_SERVER_URL || 'https://alexeerma.ee'}
+        email={settings.email}
+        location={settings.location}
+        socialLinks={settings.socialLinks}
+      />
+
       <section className="hero" aria-labelledby="intro-title">
+
         <ParallaxHeroImage src={heroImage} />
         <FloatingOrbs />
         <div className="hero-scrim" />

@@ -1,4 +1,5 @@
 import { headers as getHeaders } from 'next/headers.js'
+import type { Metadata } from 'next'
 import { getPayload, type Payload } from 'payload'
 
 import { Footer } from '@/components/Footer'
@@ -51,6 +52,16 @@ async function getSiteSettings(payload: Payload) {
   }
 }
 
+export const metadata: Metadata = {
+  title: 'Projects',
+  description: 'A full look at what I have shipped, studied, and currently building — web apps, CMS-backed sites, and product interfaces.',
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_SERVER_URL || 'https://alexeerma.ee'}/projects` },
+  openGraph: {
+    title: 'Projects — Aleksander Eerma',
+    url: `${process.env.NEXT_PUBLIC_SERVER_URL || 'https://alexeerma.ee'}/projects`,
+  },
+}
+
 export default async function ProjectsPage() {
   const headers = await getHeaders()
   const payloadConfig = await config
@@ -71,7 +82,7 @@ export default async function ProjectsPage() {
   const projects = projectsResult.docs.length ? projectsResult.docs : fallbackProjects
 
   return (
-    <main className="site-shell interior-page">
+    <main className="site-shell interior-page" id="main-content">
       <Header
         contact={{ email: settings.email, name: settings.name, availability: settings.availability, siteName: settings.siteName }}
         siteName={settings.siteName}

@@ -18,6 +18,11 @@ cp -r public "$DEPLOY_DIR/public"
 # PM2 config goes in the root of the deployed folder
 cp pm2.config.js "$DEPLOY_DIR/pm2.config.js"
 
+# Include migrations so Payload can run them on first start
+if [ -d "migrations" ]; then
+  cp -r migrations "$DEPLOY_DIR/migrations"
+fi
+
 # Copy packages that Next.js standalone sometimes misses
 for pkg in @swc/helpers; do
   if [ -d "node_modules/$pkg" ]; then

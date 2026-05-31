@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { headers as getHeaders } from 'next/headers.js'
+import type { Metadata } from 'next'
 import { MagneticLink } from '@/components/Magnetic'
 import { notFound } from 'next/navigation'
 import { getPayload, type Payload } from 'payload'
@@ -49,6 +50,38 @@ async function getSiteSettings(payload: Payload) {
   }
 }
 
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const payloadConfig = await config
+  const payload = await getPayload({ config: payloadConfig })
+  const url = process.env.NEXT_PUBLIC_SERVER_URL || 'https://alexeerma.ee'
+
+  const result = await payload.find({
+    collection: 'posts',
+    depth: 1,
+    limit: 1,
+    where: { slug: { equals: slug } },
+  })
+
+  const post = result.docs[0]
+  if (!post) return { title: 'Post not found' }
+
+  const coverImage = getMediaUrl(post.coverImage)
+
+  return {
+    title: post.title || '',
+    description: post.excerpt || '',
+    alternates: { canonical: `${url}/blog/${slug}` },
+    openGraph: {
+      title: post.title || '',
+      description: post.excerpt || '',
+      url: `${url}/blog/${slug}`,
+      type: 'article',
+      images: coverImage ? [{ url: coverImage }] : [],
+    },
+  }
+}
+
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params
   const headers = await getHeaders()
@@ -84,7 +117,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .filter(Boolean)
 
   return (
-    <main className="site-shell interior-page">
+    <main className="site-shell interior-page" id="main-content">
       <Header
         contact={{ email: settings.email, name: settings.name, availability: settings.availability, siteName: settings.siteName }}
         siteName={settings.siteName}
