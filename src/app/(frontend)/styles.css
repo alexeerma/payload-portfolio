@@ -1516,6 +1516,21 @@ h3 {
   gap: 4px;
 }
 
+.footer-logo {
+  display: inline-block;
+  opacity: 0.8;
+  transition: opacity 180ms ease;
+}
+
+.footer-logo:hover {
+  opacity: 1;
+}
+
+.footer-logo img {
+  border-radius: 8px;
+  display: block;
+}
+
 .footer-name {
   color: var(--ink);
   font-size: 1.1rem;
