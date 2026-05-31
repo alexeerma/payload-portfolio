@@ -47,8 +47,7 @@ export default buildConfig({
     client: {
       url: process.env.DATABASE_URL || '',
     },
-    push: process.env.NODE_ENV !== 'production',
-    migrationDir: path.resolve(process.cwd(), 'migrations'),
+    push: true,
   }),
   sharp,
   plugins: [],
