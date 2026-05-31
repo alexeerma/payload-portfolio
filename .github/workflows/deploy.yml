@@ -41,8 +41,8 @@ jobs:
 
       - name: Upload to server
         run: |
-          rsync -vrm deploy.tar.gz ${{ secrets.SSH_LOGIN_CREDS }}:/data05/virt114532/domeenid/www.alexeerma.ee/htdocs/
+          rsync -vrm -e "ssh -o StrictHostKeyChecking=no" deploy.tar.gz ${{ secrets.SSH_LOGIN_CREDS }}:/data05/virt114532/domeenid/www.alexeerma.ee/htdocs/
 
       - name: Extract and restart
         run: |
-          ssh ${{ secrets.SSH_LOGIN_CREDS }} "cd /data05/virt114532/domeenid/www.alexeerma.ee/htdocs && tar -xzf deploy.tar.gz -C . && pkill -f 'node server.js' || true"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_LOGIN_CREDS }} "cd /data05/virt114532/domeenid/www.alexeerma.ee/htdocs && tar -xzf deploy.tar.gz -C . && pkill -f 'node server.js' || true"
