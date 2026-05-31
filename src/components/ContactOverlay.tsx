@@ -93,12 +93,6 @@ export function ContactOverlay({ contact }: ContactOverlayProps) {
                 <a href={`mailto:${contact.email}`}>{contact.email}</a>
               </div>
             )}
-            {contact.siteName && (
-              <div className="overlay-meta-item">
-                <span>Studio</span>
-                <strong>{contact.siteName}</strong>
-              </div>
-            )}
           </div>
 
           {(contact.socialLinks?.length || contact.resumeUrl) && (
