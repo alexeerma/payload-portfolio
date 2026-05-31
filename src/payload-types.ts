@@ -322,6 +322,23 @@ export interface Post {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Override the default SEO metadata. Leave blank to use the post title and excerpt.
+   */
+  seo?: {
+    /**
+     * Shown in browser tabs and search results. Ideal length: 50–60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown in search results. Ideal length: 120–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Image shown when shared on social media. Recommended: 1200×630px.
+     */
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -575,6 +592,13 @@ export interface PostsSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -646,6 +670,23 @@ export interface SiteSetting {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Controls what search engines and social media show for your homepage.
+   */
+  seo?: {
+    /**
+     * Shown in browser tabs and Google. Ideal length: 50–60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown in Google search results. Ideal length: 120–160 characters.
+     */
+    description?: string | null;
+    /**
+     * Image shown when your site is shared on social media. Recommended: 1200×630px.
+     */
+    ogImage?: (number | null) | Media;
+  };
   featuredProjects?: (number | Project)[] | null;
   /**
    * Lines shown in the terminal widget on the hero. First line is styled as a command.
@@ -700,6 +741,13 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         label?: T;
         url?: T;
         id?: T;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
       };
   featuredProjects?: T;
   terminalLines?:

@@ -139,9 +139,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const payload = await getPayload({ config: payloadConfig })
   const settings = await getSiteSettings(payload)
   const url = process.env.NEXT_PUBLIC_SERVER_URL || 'https://alexeerma.ee'
-  const title = settings.name && settings.title ? `${settings.name} — ${settings.title}` : 'Developer Portfolio'
-  const description = settings.headline || settings.intro || ''
-  const heroImage = getMediaUrl(settings.heroImage)
+
+  const title = settings.seo?.title
+    || (settings.name && settings.title ? `${settings.name} — ${settings.title}` : 'Developer Portfolio')
+  const description = settings.seo?.description || settings.headline || settings.intro || ''
+  const ogImage = getMediaUrl(settings.seo?.ogImage) || getMediaUrl(settings.heroImage)
 
   return {
     title,
@@ -151,7 +153,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       url,
-      images: heroImage ? [{ url: heroImage }] : [],
+      images: ogImage ? [{ url: ogImage }] : [],
     },
   }
 }

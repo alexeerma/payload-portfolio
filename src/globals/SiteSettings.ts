@@ -95,6 +95,42 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
     {
+      name: 'seo',
+      type: 'group',
+      label: 'SEO',
+      admin: {
+        description: 'Controls what search engines and social media show for your homepage.',
+      },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Meta Title',
+          admin: {
+            description: 'Shown in browser tabs and Google. Ideal length: 50–60 characters.',
+            placeholder: 'Aleksander Eerma — Developer & Volleyball Player',
+          },
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'Meta Description',
+          admin: {
+            description: 'Shown in Google search results. Ideal length: 120–160 characters.',
+          },
+        },
+        {
+          name: 'ogImage',
+          type: 'upload',
+          label: 'Social Share Image',
+          relationTo: 'media',
+          admin: {
+            description: 'Image shown when your site is shared on social media. Recommended: 1200×630px.',
+          },
+        },
+      ],
+    },
+    {
       name: 'featuredProjects',
       type: 'relationship',
       hasMany: true,

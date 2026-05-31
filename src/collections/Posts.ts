@@ -108,6 +108,41 @@ export const Posts: CollectionConfig = {
         },
       ],
     },
+    {
+      name: 'seo',
+      type: 'group',
+      label: 'SEO',
+      admin: {
+        description: 'Override the default SEO metadata. Leave blank to use the post title and excerpt.',
+      },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Meta Title',
+          admin: {
+            description: 'Shown in browser tabs and search results. Ideal length: 50–60 characters.',
+          },
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          label: 'Meta Description',
+          admin: {
+            description: 'Shown in search results. Ideal length: 120–160 characters.',
+          },
+        },
+        {
+          name: 'image',
+          type: 'upload',
+          label: 'OG Image',
+          relationTo: 'media',
+          admin: {
+            description: 'Image shown when shared on social media. Recommended: 1200×630px.',
+          },
+        },
+      ],
+    },
   ],
   versions: {
     drafts: true,

@@ -66,18 +66,20 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const post = result.docs[0]
   if (!post) return { title: 'Post not found' }
 
-  const coverImage = getMediaUrl(post.coverImage)
+  const title = post.seo?.title || post.title || ''
+  const description = post.seo?.description || post.excerpt || ''
+  const ogImage = getMediaUrl(post.seo?.image) || getMediaUrl(post.coverImage)
 
   return {
-    title: post.title || '',
-    description: post.excerpt || '',
+    title,
+    description,
     alternates: { canonical: `${url}/blog/${slug}` },
     openGraph: {
-      title: post.title || '',
-      description: post.excerpt || '',
+      title,
+      description,
       url: `${url}/blog/${slug}`,
       type: 'article',
-      images: coverImage ? [{ url: coverImage }] : [],
+      images: ogImage ? [{ url: ogImage }] : [],
     },
   }
 }
