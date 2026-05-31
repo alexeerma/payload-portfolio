@@ -2,6 +2,8 @@ import { getPayload } from 'payload'
 import type { MetadataRoute } from 'next'
 import config from '@/payload.config'
 
+export const dynamic = 'force-dynamic'
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const url = process.env.NEXT_PUBLIC_SERVER_URL || 'https://alexeerma.ee'
 
