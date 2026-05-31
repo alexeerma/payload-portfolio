@@ -28,6 +28,8 @@ jobs:
       - name: Build and package
         env:
           NEXT_PUBLIC_SERVER_URL: https://alexeerma.ee
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          SMTP_HOST: smtp.zone.eu
         run: bash scripts/build-deploy.sh
 
       - name: Upload to server

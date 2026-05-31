@@ -4,6 +4,15 @@ import config from '@/payload.config'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const url = process.env.NEXT_PUBLIC_SERVER_URL || 'https://alexeerma.ee'
+
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
+    { url: `${url}/projects`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${url}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
+  ]
+
+  if (!process.env.PAYLOAD_SECRET) return staticRoutes
+
   const payload = await getPayload({ config: await config })
 
   const postsResult = await payload.find({
@@ -28,10 +37,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }))
 
-  return [
-    { url, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
-    { url: `${url}/projects`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${url}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    ...postEntries,
-  ]
+  return [...staticRoutes, ...postEntries]
 }
