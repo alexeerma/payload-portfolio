@@ -37,6 +37,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Debug SSH
+        run: |
+          ssh-add -l
+          ssh -o StrictHostKeyChecking=no -v ${{ secrets.SSH_LOGIN_CREDS }} "echo connected" 2>&1 | tail -20
+
       - name: Upload to server
         run: |
           rsync -vrm -e "ssh -o StrictHostKeyChecking=no" deploy.tar.gz ${{ secrets.SSH_LOGIN_CREDS }}:/data05/virt114532/domeenid/www.alexeerma.ee/htdocs/
