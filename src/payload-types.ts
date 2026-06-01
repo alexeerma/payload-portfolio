@@ -657,6 +657,13 @@ export interface SiteSetting {
   availability?: string | null;
   location?: string | null;
   email?: string | null;
+  /**
+   * Upload your resume as a PDF. Overrides the Resume URL below.
+   */
+  resume?: (number | null) | Media;
+  /**
+   * Fallback resume URL if no file is uploaded above.
+   */
   resumeUrl?: string | null;
   /**
    * Logo shown in the site header. Replaces the default icon.
@@ -732,6 +739,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   availability?: T;
   location?: T;
   email?: T;
+  resume?: T;
   resumeUrl?: T;
   logo?: T;
   heroImage?: T;

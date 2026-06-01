@@ -59,8 +59,19 @@ export const SiteSettings: GlobalConfig = {
       type: 'email',
     },
     {
+      name: 'resume',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Upload your resume as a PDF. Overrides the Resume URL below.',
+      },
+    },
+    {
       name: 'resumeUrl',
       type: 'text',
+      admin: {
+        description: 'Fallback resume URL if no file is uploaded above.',
+      },
     },
     {
       name: 'logo',

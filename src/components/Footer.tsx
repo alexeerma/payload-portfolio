@@ -12,9 +12,16 @@ function getLogoUrl(settings: Partial<SiteSetting>) {
   return null
 }
 
+function getResumeUrl(settings: Partial<SiteSetting>) {
+  const resume = settings.resume
+  if (resume && typeof resume === 'object' && 'url' in resume) return resume.url
+  return settings.resumeUrl || null
+}
+
 export function Footer({ settings }: FooterProps) {
   const year = new Date().getFullYear()
   const logoUrl = getLogoUrl(settings) || '/aelogo.svg'
+  const resumeUrl = getResumeUrl(settings)
 
   return (
     <footer className="site-footer">
@@ -26,8 +33,8 @@ export function Footer({ settings }: FooterProps) {
         </div>
 
         <div className="footer-center">
-          {settings.resumeUrl && (
-            <a href={settings.resumeUrl} rel="noreferrer" target="_blank">Resume</a>
+          {resumeUrl && (
+            <a href={resumeUrl} rel="noreferrer" target="_blank">Resume</a>
           )}
           {settings.socialLinks?.map((link) => (
             <a href={link.url} key={link.id ?? link.url} rel="noreferrer" target="_blank">
