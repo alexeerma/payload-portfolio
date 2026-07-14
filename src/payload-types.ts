@@ -670,6 +670,44 @@ export interface SiteSetting {
    */
   logo?: (number | null) | Media;
   heroImage?: (number | null) | Media;
+  /**
+   * Images that float and orbit clockwise in the hero background. Falls back to project covers if empty.
+   */
+  heroFloatingImages?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Seconds for one full clockwise orbit of the floating images. Lower = faster.
+   */
+  heroFloatSpeed?: number | null;
+  /**
+   * The second headline that fades in as you scroll the hero, plus its category tags.
+   */
+  heroSecondStatement?: {
+    headline?: string | null;
+    /**
+     * Small tags shown above the second headline.
+     */
+    categories?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * The stat tiles in the hero HUD bar. Leave empty to auto-use project and skill counts.
+   */
+  heroStats?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
   socialLinks?:
     | {
         label: string;
@@ -743,6 +781,31 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   resumeUrl?: T;
   logo?: T;
   heroImage?: T;
+  heroFloatingImages?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  heroFloatSpeed?: T;
+  heroSecondStatement?:
+    | T
+    | {
+        headline?: T;
+        categories?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
+  heroStats?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
   socialLinks?:
     | T
     | {

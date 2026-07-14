@@ -7,7 +7,6 @@ import { notFound } from 'next/navigation'
 import { getPayload, type Payload } from 'payload'
 
 import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
 import config from '@/payload.config'
 import type { Media, SiteSetting } from '@/payload-types'
 
@@ -120,12 +119,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <main className="site-shell interior-page" id="main-content">
-      <Header
-        contact={{ email: settings.email, name: settings.name, availability: settings.availability, siteName: settings.siteName }}
-        siteName={settings.siteName}
-        logoUrl={typeof settings.logo === 'object' && settings.logo && 'url' in settings.logo ? settings.logo.url : null}
-      />
-
       <article className="post-shell">
         <MagneticLink className="back-link" href="/blog">
           Back to blog

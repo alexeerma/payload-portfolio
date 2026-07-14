@@ -1,5 +1,9 @@
-import React from 'react'
 import type { Metadata, Viewport } from 'next'
+import { getPayload } from 'payload'
+import React from 'react'
+
+import { Dock } from '@/components/Dock'
+import config from '@/payload.config'
 import './styles.css'
 
 export const viewport: Viewport = {
@@ -30,14 +34,26 @@ export const metadata: Metadata = {
   },
 }
 
+async function getEmail() {
+  try {
+    const payload = await getPayload({ config: await config })
+    const settings = await payload.findGlobal({ slug: 'site-settings', depth: 0 })
+    return settings?.email ?? null
+  } catch {
+    return null
+  }
+}
+
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
+  const email = await getEmail()
 
   return (
     <html lang="en">
       <body>
         <a className="skip-link" href="#main-content">Skip to content</a>
         {children}
+        <Dock email={email} />
       </body>
     </html>
   )

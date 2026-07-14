@@ -4,7 +4,6 @@ import { getPayload, type Payload } from 'payload'
 
 import { BlogPreview } from '@/components/BlogPreview'
 import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
 import config from '@/payload.config'
 import type { SiteSetting } from '@/payload-types'
 
@@ -55,12 +54,6 @@ export default async function BlogPage() {
 
   return (
     <main className="site-shell interior-page" id="main-content">
-      <Header
-        contact={{ email: settings.email, name: settings.name, availability: settings.availability, siteName: settings.siteName }}
-        siteName={settings.siteName}
-        logoUrl={typeof settings.logo === 'object' && settings.logo && 'url' in settings.logo ? settings.logo.url : null}
-      />
-
       <section className="page-hero" aria-labelledby="blog-page-title">
         <p className="eyebrow">Blog</p>
         <h1 id="blog-page-title">Notes from code and sport.</h1>

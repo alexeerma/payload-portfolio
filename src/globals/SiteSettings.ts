@@ -87,6 +87,65 @@ export const SiteSettings: GlobalConfig = {
       relationTo: 'media',
     },
     {
+      name: 'heroFloatingImages',
+      type: 'array',
+      label: 'Hero Floating Images',
+      admin: {
+        description:
+          'Images that float and orbit clockwise in the hero background. Falls back to project covers if empty.',
+        initCollapsed: true,
+      },
+      maxRows: 7,
+      fields: [{ name: 'image', type: 'upload', relationTo: 'media', required: true }],
+    },
+    {
+      name: 'heroFloatSpeed',
+      type: 'number',
+      label: 'Hero Float Orbit Speed (seconds)',
+      defaultValue: 16,
+      min: 4,
+      max: 60,
+      admin: {
+        description: 'Seconds for one full clockwise orbit of the floating images. Lower = faster.',
+      },
+    },
+    {
+      name: 'heroSecondStatement',
+      type: 'group',
+      label: 'Hero Second Statement',
+      admin: {
+        description: 'The second headline that fades in as you scroll the hero, plus its category tags.',
+      },
+      fields: [
+        {
+          name: 'headline',
+          type: 'textarea',
+          defaultValue: 'I build web interfaces, CMS-driven sites and internal tools teams actually use.',
+        },
+        {
+          name: 'categories',
+          type: 'array',
+          admin: { initCollapsed: true, description: 'Small tags shown above the second headline.' },
+          fields: [{ name: 'text', type: 'text', required: true }],
+        },
+      ],
+    },
+    {
+      name: 'heroStats',
+      type: 'array',
+      label: 'Hero Stat Tiles',
+      admin: {
+        description:
+          'The stat tiles in the hero HUD bar. Leave empty to auto-use project and skill counts.',
+        initCollapsed: true,
+      },
+      maxRows: 4,
+      fields: [
+        { name: 'label', type: 'text', required: true },
+        { name: 'value', type: 'text', required: true },
+      ],
+    },
+    {
       name: 'socialLinks',
       type: 'array',
       admin: {

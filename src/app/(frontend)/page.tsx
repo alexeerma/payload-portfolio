@@ -1,21 +1,16 @@
 import { headers as getHeaders } from 'next/headers.js'
-import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getPayload, type Payload } from 'payload'
-import React from 'react'
 
 import { AnimateIn } from '@/components/AnimateIn'
 import { AnimatedTimeline } from '@/components/AnimatedTimeline'
 import { CursorGlow } from '@/components/CursorGlow'
-import { FloatingOrbs } from '@/components/FloatingOrbs'
 import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { HeroContent } from '@/components/HeroContent'
-import { HeroDashboard } from '@/components/HeroDashboard'
+import { HeroStage } from '@/components/HeroStage'
+import { Reveal3D } from '@/components/Reveal3D'
 import { PersonJsonLd } from '@/components/JsonLd'
 import { MagneticLink } from '@/components/Magnetic'
-import { ParallaxHeroImage } from '@/components/ParallaxHeroImage'
-import { ProjectShowcase } from '@/components/ProjectShowcase'
+import { ProjectStack } from '@/components/ProjectStack'
 import { ScrollProgress } from '@/components/ScrollProgress'
 import { SkillMatrix } from '@/components/SkillMatrix'
 import config from '@/payload.config'
@@ -162,7 +157,7 @@ export default async function HomePage() {
   const headers = await getHeaders()
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
+  await payload.auth({ headers })
 
   const [settingsResult, projectsResult, skillsResult, experienceResult] =
     await Promise.all([
@@ -198,38 +193,21 @@ export default async function HomePage() {
   const heroImage = getMediaUrl(settings.heroImage) || '/portfolio-hero.png'
   const logoUrl = getMediaUrl(settings.logo)
   const resumeUrl = getMediaUrl(settings.resume) || settings.resumeUrl
-  const heroStats = [
-    { label: 'Projects', value: projects.length.toString().padStart(2, '0') },
-    { label: 'Stack', value: skills.length.toString().padStart(2, '0') },
-    { label: 'Athlete', value: 'Pro' },
-  ]
-  const terminalLines = settings.terminalLines?.length
-    ? settings.terminalLines.map((l) => l.text)
-    : ['$ pnpm dev', 'clean interfaces', 'train, ship, repeat']
-  const dashboardSignals = settings.dashboardSignals?.length
-    ? settings.dashboardSignals.map((s) => ({ label: s.label, value: s.value }))
-    : [{ label: 'CMS', value: 'Payload' }, { label: 'Build', value: 'Next.js' }, { label: 'Status', value: 'Live' }]
-  const tickerItems = settings.tickerItems?.length
-    ? settings.tickerItems.map((t) => t.text)
-    : ['Developer', 'Professional volleyball', 'Clean interfaces', 'CMS workflows', 'Product thinking']
+  const heroStats = settings.heroStats?.length
+    ? settings.heroStats.map((s) => ({ label: s.label, value: s.value }))
+    : [
+        { label: 'Projects', value: projects.length.toString().padStart(2, '0') },
+        { label: 'Stack', value: skills.length.toString().padStart(2, '0') },
+        { label: 'Athlete', value: 'Pro' },
+      ]
+  const heroCategories = settings.heroSecondStatement?.categories?.map((c) => c.text).filter(Boolean) as
+    | string[]
+    | undefined
 
   return (
     <main className="site-shell" id="main-content">
       <CursorGlow />
       <ScrollProgress />
-      <Header
-        contact={{
-          availability: settings.availability,
-          email: settings.email,
-          location: settings.location,
-          name: settings.name,
-          resumeUrl: resumeUrl,
-          siteName: settings.siteName,
-          socialLinks: settings.socialLinks,
-        }}
-        logoUrl={logoUrl}
-        siteName={settings.siteName}
-      />
 
       <PersonJsonLd
         name={settings.name || 'Aleksander Eerma'}
@@ -240,39 +218,29 @@ export default async function HomePage() {
         socialLinks={settings.socialLinks}
       />
 
-      <section className="hero" aria-labelledby="intro-title">
-
-        <ParallaxHeroImage src={heroImage} />
-        <FloatingOrbs />
-        <div className="hero-scrim" />
-        <div className="hero-grid" aria-hidden="true" />
-        <HeroContent
-          availability={settings.availability}
-          headline={settings.headline}
-          location={settings.location}
-          name={settings.name}
-          resumeUrl={resumeUrl}
-          role={settings.title}
-          socialLinks={settings.socialLinks}
-        />
-        <HeroDashboard
-          dashboardSignals={dashboardSignals}
-          heroStats={heroStats}
-          terminalLines={terminalLines}
-        />
-        <div className="ticker" aria-hidden="true">
-          {[0, 1].map((copy) => (
-            <div className="ticker-track" key={copy} aria-hidden={copy === 1 ? 'true' : undefined}>
-              {tickerItems.map((item, i) => (
-                <React.Fragment key={i}>
-                  <span>{item}</span>
-                  <span>·</span>
-                </React.Fragment>
-              ))}
-            </div>
-          ))}
-        </div>
-      </section>
+      <HeroStage
+        name={settings.name}
+        title={settings.title}
+        headline={settings.headline}
+        intro={settings.intro}
+        availability={settings.availability}
+        email={settings.email}
+        resumeUrl={resumeUrl}
+        logoUrl={logoUrl}
+        avatarUrl={heroImage}
+        socialLinks={settings.socialLinks}
+        stats={heroStats}
+        floatImages={
+          settings.heroFloatingImages?.length
+            ? (settings.heroFloatingImages
+                .map((f) => getMediaUrl(f.image))
+                .filter(Boolean) as string[])
+            : projects.map((p) => getMediaUrl(p.coverImage) || heroImage)
+        }
+        floatSpeed={settings.heroFloatSpeed ?? 16}
+        secondHeadline={settings.heroSecondStatement?.headline}
+        categories={heroCategories}
+      />
 
       <AnimateIn>
         <section className="intro-section" aria-label="Profile">
@@ -290,9 +258,7 @@ export default async function HomePage() {
             <MagneticLink href="/projects">All projects</MagneticLink>
           </div>
         </AnimateIn>
-        <AnimateIn delay={0.1}>
-          <ProjectShowcase projects={projects} />
-        </AnimateIn>
+        <ProjectStack projects={projects} />
       </section>
 
       <section className="content-band" id="skills" aria-labelledby="skills-title">
@@ -312,7 +278,9 @@ export default async function HomePage() {
             <h2 id="experience-title">Work across code and sport.</h2>
           </div>
         </AnimateIn>
-        <AnimatedTimeline items={experience} />
+        <Reveal3D axis="y" depth={160}>
+          <AnimatedTimeline items={experience} />
+        </Reveal3D>
       </section>
 
       <Footer settings={settings} />

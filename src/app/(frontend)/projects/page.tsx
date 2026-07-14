@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { getPayload, type Payload } from 'payload'
 
 import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
 import { ProjectShowcase } from '@/components/ProjectShowcase'
 import config from '@/payload.config'
 import type { Project, SiteSetting } from '@/payload-types'
@@ -83,12 +82,6 @@ export default async function ProjectsPage() {
 
   return (
     <main className="site-shell interior-page" id="main-content">
-      <Header
-        contact={{ email: settings.email, name: settings.name, availability: settings.availability, siteName: settings.siteName }}
-        siteName={settings.siteName}
-        logoUrl={typeof settings.logo === 'object' && settings.logo && 'url' in settings.logo ? settings.logo.url : null}
-      />
-
       <section className="page-hero" aria-labelledby="projects-page-title">
         <p className="eyebrow">Work</p>
         <h1 id="projects-page-title">Projects built to be used.</h1>
