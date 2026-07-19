@@ -83,11 +83,8 @@ export const Posts: CollectionConfig = {
     },
     {
       name: 'body',
-      type: 'textarea',
+      type: 'richText',
       required: true,
-      admin: {
-        description: 'Write paragraphs separated by blank lines.',
-      },
     },
     {
       name: 'coverImage',

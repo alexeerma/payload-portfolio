@@ -461,28 +461,6 @@ h3 {
   box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
 }
 
-.form-submit {
-  border: 1px solid rgba(0, 122, 255, 0.3);
-  border-radius: 999px;
-  color: var(--blue);
-  font-size: 0.95rem;
-  font-weight: 760;
-  justify-self: start;
-  padding: 13px 28px;
-  transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    color 180ms ease,
-    transform 180ms ease;
-}
-
-.form-submit:hover {
-  border-color: var(--blue);
-  box-shadow: 0 12px 32px rgba(0, 122, 255, 0.18);
-  color: var(--blue);
-  transform: translateY(-2px);
-}
-
 .overlay-sent {
   display: grid;
   gap: 14px;
@@ -632,10 +610,7 @@ h3 {
 .link-row a,
 .nav-link,
 .contact-trigger,
-.section-heading.with-action a,
-.back-link,
-.overlay-links a,
-.form-submit {
+.overlay-links a {
   animation: gradient-shift 7s ease-in-out infinite alternate;
   background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(59,155,255,0.16) 35%, rgba(74,222,128,0.14) 62%, rgba(191,90,242,0.12) 85%, rgba(255,255,255,0.08) 100%);
   background-size: 250% auto;
@@ -904,32 +879,6 @@ h3 {
   display: flex;
   gap: 24px;
   justify-content: space-between;
-}
-
-.section-heading.with-action a,
-.back-link {
-  background: var(--surface);
-  border: 1px solid rgba(29, 29, 31, 0.08);
-  border-radius: 999px;
-  box-shadow: 0 8px 22px rgba(29, 29, 31, 0.06);
-  color: var(--blue);
-  font-size: 0.9rem;
-  font-weight: 760;
-  justify-self: start;
-  padding: 9px 14px;
-  text-decoration: none;
-  transition:
-    box-shadow 180ms ease,
-    transform 180ms ease;
-  width: fit-content;
-}
-
-.section-heading.with-action a:hover,
-.section-heading.with-action a:focus-visible,
-.back-link:hover,
-.back-link:focus-visible {
-  box-shadow: 0 14px 34px rgba(29, 29, 31, 0.1);
-  transform: translateY(-2px);
 }
 
 .section-heading .eyebrow {
@@ -1408,9 +1357,10 @@ h3 {
 
 .post-header h1 {
   color: var(--ink);
-  font-size: 3.6rem;
-  line-height: 1;
-  max-width: 12ch;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  letter-spacing: -0.015em;
+  line-height: 1.08;
+  max-width: 24ch;
 }
 
 .post-header p {
@@ -1715,8 +1665,7 @@ h3 {
     font-size: 3.1rem;
   }
 
-  .page-hero h1,
-  .post-header h1 {
+  .page-hero h1 {
     font-size: 3.7rem;
   }
 
@@ -1846,9 +1795,12 @@ h3 {
     padding-top: 148px;
   }
 
-  .page-hero h1,
-  .post-header h1 {
+  .page-hero h1 {
     font-size: 2.8rem;
+  }
+
+  .post-header h1 {
+    max-width: none;
   }
 
   .page-hero p:not(.eyebrow),
@@ -2388,22 +2340,45 @@ h3 {
   max-width: 44ch;
 }
 
-.stage-cta {
+/* Shared HUD button — used by the hero CTAs, back links, section actions, and the contact form. */
+.stage-cta,
+.back-link,
+.section-heading.with-action a,
+.form-submit {
+  background: transparent;
+  border: none;
   color: #fff;
+  cursor: pointer;
+  display: inline-block;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.78rem;
   font-weight: 600;
+  justify-self: start;
   letter-spacing: 0.12em;
-  margin-top: 8px;
   padding: 15px 30px;
   position: relative;
+  text-decoration: none;
   text-transform: uppercase;
   transition: background 180ms ease, color 180ms ease;
+  width: fit-content;
 }
+.stage-cta { margin-top: 8px; }
 .stage-cta::before,
 .stage-cta::after,
 .stage-cta span::before,
-.stage-cta span::after {
+.stage-cta span::after,
+.back-link::before,
+.back-link::after,
+.back-link span::before,
+.back-link span::after,
+.section-heading.with-action a::before,
+.section-heading.with-action a::after,
+.section-heading.with-action a span::before,
+.section-heading.with-action a span::after,
+.form-submit::before,
+.form-submit::after,
+.form-submit span::before,
+.form-submit span::after {
   border-color: var(--hud-mut);
   border-style: solid;
   content: '';
@@ -2411,12 +2386,30 @@ h3 {
   position: absolute;
   width: 7px;
 }
-.stage-cta::before { border-width: 1px 0 0 1px; left: -1px; top: -1px; }
-.stage-cta::after { border-width: 1px 1px 0 0; right: -1px; top: -1px; }
-.stage-cta span::before { border-width: 0 0 1px 1px; bottom: -1px; left: -1px; }
-.stage-cta span::after { border-width: 0 1px 1px 0; bottom: -1px; right: -1px; }
+.stage-cta::before,
+.back-link::before,
+.section-heading.with-action a::before,
+.form-submit::before { border-width: 1px 0 0 1px; left: -1px; top: -1px; }
+.stage-cta::after,
+.back-link::after,
+.section-heading.with-action a::after,
+.form-submit::after { border-width: 1px 1px 0 0; right: -1px; top: -1px; }
+.stage-cta span::before,
+.back-link span::before,
+.section-heading.with-action a span::before,
+.form-submit span::before { border-width: 0 0 1px 1px; bottom: -1px; left: -1px; }
+.stage-cta span::after,
+.back-link span::after,
+.section-heading.with-action a span::after,
+.form-submit span::after { border-width: 0 1px 1px 0; bottom: -1px; right: -1px; }
 .stage-cta:hover,
-.stage-cta:focus-visible { background: #fff; color: #0b0b0c; }
+.stage-cta:focus-visible,
+.back-link:hover,
+.back-link:focus-visible,
+.section-heading.with-action a:hover,
+.section-heading.with-action a:focus-visible,
+.form-submit:hover,
+.form-submit:focus-visible { background: #fff; color: #0b0b0c; }
 
 .stage-avatar {
   align-items: center;

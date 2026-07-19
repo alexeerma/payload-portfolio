@@ -132,7 +132,7 @@ export function ContactOverlay({ contact }: ContactOverlayProps) {
                 <label htmlFor="contact-message">Message</label>
                 <textarea id="contact-message" name="message" placeholder="Tell me about your project…" required rows={5} />
               </div>
-              <MagneticButton className="form-submit" type="submit">Send message</MagneticButton>
+              <MagneticButton className="form-submit" type="submit"><span>Send message</span></MagneticButton>
             </form>
           )}
         </div>

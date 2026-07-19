@@ -65,3 +65,6 @@ AGENTS 2.md
 
 # Local test env
 test.env
+
+# Stray screenshot folder
+/undefined/

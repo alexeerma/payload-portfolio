@@ -3,6 +3,7 @@ import 'dotenv/config'
 import { getPayload } from 'payload'
 
 import config from '../src/payload.config'
+import { paragraphsToLexical, textToLexical } from '../src/lib/lexical'
 
 const projectSlugs = ['atlas-dashboard', 'studio-portfolio', 'api-observatory']
 const postSlugs = [
@@ -183,11 +184,11 @@ async function seed() {
         readTime: '3 min read',
         excerpt:
           'How structure, repetition, and honest feedback from volleyball carry into product work.',
-        body: [
+        body: paragraphsToLexical([
           'Professional sport teaches you to respect small habits. You do not get better from one dramatic session. You get better by showing up, paying attention, and repeating the right things with enough honesty to adjust.',
           'That maps surprisingly well to building software. A clean interface, a stable CMS model, or a useful product workflow usually comes from the same rhythm: make a version, test it, notice what feels off, and improve it.',
           'The best work I do happens when I treat development less like a sprint for cleverness and more like training. Clear goals, focused reps, sharp feedback, and a calm standard for quality.',
-        ].join('\n\n'),
+        ].join('\n\n')),
         tags: [{ label: 'Process' }, { label: 'Sport' }],
         _status: 'published',
       },
@@ -203,11 +204,11 @@ async function seed() {
         readTime: '4 min read',
         excerpt:
           'A few notes on clean sections, editable content, and avoiding unnecessary visual noise.',
-        body: [
+        body: paragraphsToLexical([
           'A portfolio does not need to prove everything at once. It needs to make the right things easy to understand: who you are, what you build, what you care about, and how someone can contact you.',
           'That is why I like using a CMS for portfolio content. The structure stays stable, but the details can evolve. Projects, notes, stack, and experience can change without rebuilding the whole site every time.',
           'Visually, the same rule applies. A light system, strong spacing, and a few polished interactions can feel much better than a page that tries to be impressive in every section.',
-        ].join('\n\n'),
+        ].join('\n\n')),
         tags: [{ label: 'Design' }, { label: 'CMS' }],
         _status: 'published',
       },
@@ -223,11 +224,11 @@ async function seed() {
         readTime: '3 min read',
         excerpt:
           'What product work can borrow from high-trust teams: clarity, roles, and shared rhythm.',
-        body: [
+        body: paragraphsToLexical([
           'Good teams are not just talented people standing near each other. They need trust, timing, clear roles, and the ability to recover quickly when something goes wrong.',
           'Product work has the same shape. Design, development, content, and feedback all need to move together. When the rhythm is clear, the final experience feels calmer for the user.',
           'That is the kind of work I enjoy: simple systems, sharp communication, and interfaces that feel composed because the process behind them was composed too.',
-        ].join('\n\n'),
+        ].join('\n\n')),
         tags: [{ label: 'Teamwork' }, { label: 'Product' }],
         _status: 'published',
       },
@@ -243,8 +244,9 @@ async function seed() {
         location: 'Europe',
         current: true,
         startDate: '2020-01-01T00:00:00.000Z',
-        summary:
+        summary: textToLexical(
           'Competing professionally while bringing training discipline, teamwork, and performance habits into product work.',
+        ),
         highlights: [
           { item: 'Built habits around preparation, feedback, and performing under pressure.' },
           { item: 'Worked in high-trust teams where communication and consistency matter every day.' },
@@ -262,8 +264,9 @@ async function seed() {
         location: 'Remote',
         current: true,
         startDate: '2024-01-01T00:00:00.000Z',
-        summary:
+        summary: textToLexical(
           'Building CMS-backed marketing sites, internal dashboards, and practical product prototypes.',
+        ),
         highlights: [
           { item: 'Turned loose product ideas into working Next.js and Payload implementations.' },
           { item: 'Improved content workflows for teams that update websites every week.' },
@@ -286,8 +289,9 @@ async function seed() {
         current: false,
         startDate: '2022-04-01T00:00:00.000Z',
         endDate: '2023-12-01T00:00:00.000Z',
-        summary:
+        summary: textToLexical(
           'Worked on responsive interfaces, component libraries, and product analytics surfaces.',
+        ),
         highlights: [
           { item: 'Built accessible UI patterns for dense dashboard screens.' },
           { item: 'Collaborated with design and backend teams on reusable product foundations.' },

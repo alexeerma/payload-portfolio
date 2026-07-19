@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { MagneticLink } from '@/components/Magnetic'
 import { notFound } from 'next/navigation'
 import { getPayload, type Payload } from 'payload'
+import { RichText } from '@payloadcms/richtext-lexical/react'
 
 import { Footer } from '@/components/Footer'
 import config from '@/payload.config'
@@ -112,16 +113,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const settings = { ...defaultSettings, ...settingsResult }
   const coverImage = getMediaUrl(post.coverImage)
-  const paragraphs = post.body
-    .split(/\n{2,}/)
-    .map((paragraph) => paragraph.trim())
-    .filter(Boolean)
+  // Legacy posts saved before the richText migration hold a plain string body.
+  const legacyParagraphs =
+    typeof post.body === 'string'
+      ? (post.body as string)
+          .split(/\n{2,}/)
+          .map((paragraph) => paragraph.trim())
+          .filter(Boolean)
+      : null
 
   return (
     <main className="site-shell interior-page" id="main-content">
       <article className="post-shell">
         <MagneticLink className="back-link" href="/blog">
-          Back to blog
+          <span>Back to blog</span>
         </MagneticLink>
         <header className="post-header">
           <div className="blog-card-meta">
@@ -146,9 +151,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         )}
 
         <div className="post-body">
-          {paragraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
+          {legacyParagraphs ? (
+            legacyParagraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)
+          ) : (
+            <RichText data={post.body} />
+          )}
         </div>
       </article>
 

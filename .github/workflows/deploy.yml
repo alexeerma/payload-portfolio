@@ -43,4 +43,4 @@ jobs:
 
       - name: Extract and restart
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_LOGIN_CREDS }} "cd /data05/virt114532/domeenid/www.alexeerma.ee/htdocs && tar -xzf deploy.tar.gz -C . && pkill -f 'node server.js' || true"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_LOGIN_CREDS }} "cd /data05/virt114532/domeenid/www.alexeerma.ee/htdocs && tar -xzf deploy.tar.gz -C . && (pm2 restart payload-portfolio --update-env || pm2 start pm2.config.js)"

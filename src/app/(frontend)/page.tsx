@@ -30,9 +30,11 @@ type DisplaySkill = Pick<Skill, 'name' | 'category'> & {
 
 type DisplayExperience = Pick<
   Experience,
-  'role' | 'company' | 'location' | 'current' | 'startDate' | 'endDate' | 'summary' | 'highlights'
+  'role' | 'company' | 'location' | 'current' | 'startDate' | 'endDate' | 'highlights'
 > & {
   id?: number | string
+  // richText (Lexical) once saved in the admin, plain string for the hardcoded fallbacks
+  summary?: Experience['summary'] | string
 }
 
 
@@ -255,7 +257,7 @@ export default async function HomePage() {
               <p className="eyebrow">Selected Work</p>
               <h2 id="projects-title">Projects built to be used.</h2>
             </div>
-            <MagneticLink href="/projects">All projects</MagneticLink>
+            <MagneticLink href="/projects"><span>All projects</span></MagneticLink>
           </div>
         </AnimateIn>
         <ProjectStack projects={projects} />

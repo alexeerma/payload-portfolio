@@ -1,6 +1,8 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
+import { RichText } from '@payloadcms/richtext-lexical/react'
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
 type TimelineItem = {
   id?: number | string
@@ -10,8 +12,15 @@ type TimelineItem = {
   current?: boolean | null
   startDate: string
   endDate?: string | null
-  summary?: string | null
+  // richText (Lexical) from the CMS, or a plain string for hardcoded fallbacks
+  summary?: SerializedEditorState | string | null
   highlights?: Array<{ id?: string | null; item: string }> | null
+}
+
+function Summary({ summary }: { summary?: SerializedEditorState | string | null }) {
+  if (!summary) return null
+  if (typeof summary === 'string') return <p>{summary}</p>
+  return <RichText className="timeline-summary" data={summary} />
 }
 
 type AnimatedTimelineProps = {
@@ -47,7 +56,7 @@ export function AnimatedTimeline({ items }: AnimatedTimelineProps) {
             </p>
           </div>
           <div>
-            <p>{item.summary}</p>
+            <Summary summary={item.summary} />
             {!!item.highlights?.length && (
               <ul className="highlight-list">
                 {item.highlights.slice(0, 3).map((h) => (

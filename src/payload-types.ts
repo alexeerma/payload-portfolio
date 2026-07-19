@@ -275,7 +275,21 @@ export interface Experience {
   current?: boolean | null;
   startDate: string;
   endDate?: string | null;
-  summary: string;
+  summary: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   highlights?:
     | {
         item: string;
@@ -311,10 +325,21 @@ export interface Post {
    */
   readTime?: string | null;
   excerpt: string;
-  /**
-   * Write paragraphs separated by blank lines.
-   */
-  body: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   coverImage?: (number | null) | Media;
   tags?:
     | {
