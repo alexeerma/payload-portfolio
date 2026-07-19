@@ -30,7 +30,7 @@ type DisplaySkill = Pick<Skill, 'name' | 'category'> & {
 
 type DisplayExperience = Pick<
   Experience,
-  'role' | 'company' | 'location' | 'current' | 'startDate' | 'endDate' | 'highlights'
+  'role' | 'company' | 'location' | 'current' | 'startDate' | 'endDate' | 'highlights' | 'technologies'
 > & {
   id?: number | string
   // richText (Lexical) once saved in the admin, plain string for the hardcoded fallbacks
@@ -83,6 +83,7 @@ const fallbackExperience: DisplayExperience[] = [
       { item: 'Built discipline around feedback loops, preparation, and performing under pressure.' },
       { item: 'Learned to communicate clearly in high-trust team environments.' },
     ],
+    technologies: [{ technology: 'Teamwork' }, { technology: 'Performance' }],
   },
   {
     role: 'Full-stack Developer',
@@ -94,6 +95,11 @@ const fallbackExperience: DisplayExperience[] = [
     highlights: [
       { item: 'Shape product requirements into clean content models and maintainable interfaces.' },
       { item: 'Deliver fast Next.js builds with a CMS workflow that non-developers can use.' },
+    ],
+    technologies: [
+      { technology: 'Next.js' },
+      { technology: 'Payload CMS' },
+      { technology: 'TypeScript' },
     ],
   },
 ]
@@ -232,14 +238,6 @@ export default async function HomePage() {
         avatarUrl={heroImage}
         socialLinks={settings.socialLinks}
         stats={heroStats}
-        floatImages={
-          settings.heroFloatingImages?.length
-            ? (settings.heroFloatingImages
-                .map((f) => getMediaUrl(f.image))
-                .filter(Boolean) as string[])
-            : projects.map((p) => getMediaUrl(p.coverImage) || heroImage)
-        }
-        floatSpeed={settings.heroFloatSpeed ?? 16}
         secondHeadline={settings.heroSecondStatement?.headline}
         categories={heroCategories}
       />

@@ -5,22 +5,30 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 import { gsap, registerGsap } from '@/lib/gsap'
+import Strands from '@/components/Strands'
+
+// ── Hero background animation ──────────────────────────────────────────────
+// Tweak the strands here. Full prop reference in src/components/Strands.tsx.
+const STRANDS_CONFIG = {
+  colors: ['#3b9bff', '#7C3AED', '#06B6D4'], // strand palette (hex)
+  count: 5, // number of strands
+  speed: 0.5, // flow speed
+  amplitude: 2.7, // vertical wave reach
+  waviness: 0.2, // curve density
+  thickness: 0.7, // strand width
+  glow: 2.6, // bloom strength
+  taper: 1.7, // edge fade sharpness
+  spread: 1, // separation between strands
+  intensity: 0.45, // overall brightness
+  saturation: 1.5, // color vibrance
+  opacity: 1, // layer transparency
+  scale: 3, // zoom of the whole effect
+}
+// ───────────────────────────────────────────────────────────────────────────
 
 type SocialLink = { id?: string | null; label: string; url: string }
 
 const DEFAULT_CATEGORIES = ['Next.js', 'Payload', 'TypeScript', 'Design systems', 'Deployment']
-
-// Scatter slots around the hero edges, avoiding the centre where the headline sits.
-// r = orbit radius (px), phase = 0..1 offset around the clockwise orbit.
-const FLOAT_SLOTS = [
-  { top: '17%', left: '9%', size: 122, depth: 0.7, r: 34, phase: 0, rot: -8 },
-  { top: '13%', left: '80%', size: 96, depth: 1.1, r: 28, phase: 0.14, rot: 7 },
-  { top: '56%', left: '13%', size: 88, depth: 0.5, r: 40, phase: 0.28, rot: 6 },
-  { top: '52%', left: '85%', size: 132, depth: 1.25, r: 24, phase: 0.42, rot: -6 },
-  { top: '78%', left: '26%', size: 78, depth: 0.85, r: 36, phase: 0.57, rot: 9 },
-  { top: '80%', left: '71%', size: 104, depth: 0.6, r: 30, phase: 0.71, rot: -10 },
-  { top: '25%', left: '65%', size: 72, depth: 1.0, r: 44, phase: 0.85, rot: 5 },
-]
 
 type HeroStageProps = {
   name?: string | null
@@ -34,8 +42,6 @@ type HeroStageProps = {
   avatarUrl?: string | null
   socialLinks?: SocialLink[] | null
   stats: { label: string; value: string }[]
-  floatImages?: string[]
-  floatSpeed?: number
   secondHeadline?: string | null
   categories?: string[]
 }
@@ -61,8 +67,6 @@ export function HeroStage({
   avatarUrl,
   socialLinks,
   stats,
-  floatImages,
-  floatSpeed = 16,
   secondHeadline,
   categories,
 }: HeroStageProps) {
@@ -73,15 +77,9 @@ export function HeroStage({
   const [scroll, setScroll] = useState(0)
   const [time, setTime] = useState('0.0')
   const startRef = useRef<number | null>(null)
-  const floatLayerRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
   const stmtARef = useRef<HTMLDivElement>(null)
   const stmtBRef = useRef<HTMLDivElement>(null)
-
-  const imgs = floatImages?.filter(Boolean) ?? []
-  const floaters = imgs.length
-    ? FLOAT_SLOTS.map((slot, i) => ({ src: imgs[i % imgs.length], ...slot }))
-    : []
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => setCursor({ x: Math.round(e.clientX), y: Math.round(e.clientY) })
@@ -104,31 +102,6 @@ export function HeroStage({
     }
   }, [])
 
-  // Depth parallax for the floating images (each tile drifts by its own depth).
-  useEffect(() => {
-    const layer = floatLayerRef.current
-    if (!layer) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-    const tiles = Array.from(layer.querySelectorAll<HTMLElement>('.stage-floater'))
-    const movers = tiles.map((el) => ({
-      x: gsap.quickTo(el, 'x', { duration: 1.1, ease: 'power3.out' }),
-      y: gsap.quickTo(el, 'y', { duration: 1.1, ease: 'power3.out' }),
-      depth: parseFloat(el.dataset.depth || '1'),
-    }))
-
-    const onMove = (e: PointerEvent) => {
-      const nx = e.clientX / window.innerWidth - 0.5
-      const ny = e.clientY / window.innerHeight - 0.5
-      movers.forEach((m) => {
-        m.x(nx * m.depth * -60)
-        m.y(ny * m.depth * -60)
-      })
-    }
-    window.addEventListener('pointermove', onMove, { passive: true })
-    return () => window.removeEventListener('pointermove', onMove)
-  }, [floaters.length])
-
   // Pin the hero and crossfade statement A -> statement B on scroll.
   useEffect(() => {
     const section = sectionRef.current
@@ -140,7 +113,6 @@ export function HeroStage({
       return
     }
 
-    const floatLayer = floatLayerRef.current
     const g = registerGsap()
     const ctx = g.context(() => {
       // GSAP owns the centring (xPercent/yPercent) so it stays centred as it animates;
@@ -160,10 +132,9 @@ export function HeroStage({
         },
       })
 
-      // Only ONE statement is centred & sharp at a time; the images fade to black.
-      // A blurs + fades up out, floating images fade away.
+      // Only ONE statement is centred & sharp at a time.
+      // A blurs + fades up out.
       tl.to(a, { autoAlpha: 0, y: -60, filter: 'blur(16px)', ease: 'power1.in', duration: 1 }, 0.4)
-      if (floatLayer) tl.to(floatLayer, { autoAlpha: 0, ease: 'power1.in', duration: 1 }, 0.4)
       // B rises into the centre out of black, blur clearing; it stays as the final
       // pinned state and simply scrolls away into the next section (no black gap).
       tl.fromTo(
@@ -204,33 +175,9 @@ export function HeroStage({
     <section className="hero-stage" aria-labelledby="hero-title" ref={sectionRef}>
       <div className="stage-grain" aria-hidden="true" />
       <div className="stage-spotlight" aria-hidden="true" />
-
-      {floaters.length > 0 && (
-        <div className="stage-floaters" aria-hidden="true" ref={floatLayerRef}>
-          {floaters.map((f, i) => (
-            <div
-              className="stage-floater"
-              data-depth={f.depth}
-              key={i}
-              style={
-                {
-                  '--size': `${f.size}px`,
-                  '--dur': `${floatSpeed}s`,
-                  '--delay': `${-(f.phase * floatSpeed)}s`,
-                  '--r': `${f.r}px`,
-                  '--rot': `${f.rot}deg`,
-                  left: f.left,
-                  top: f.top,
-                } as React.CSSProperties
-              }
-            >
-              <span className="floater-inner">
-                <Image alt="" fill sizes="140px" src={f.src} />
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="stage-strands" aria-hidden="true">
+        <Strands {...STRANDS_CONFIG} />
+      </div>
 
       <div className="stage-frame" aria-hidden="true">
         <span className="tick tick-tl" />

@@ -15,6 +15,7 @@ type TimelineItem = {
   // richText (Lexical) from the CMS, or a plain string for hardcoded fallbacks
   summary?: SerializedEditorState | string | null
   highlights?: Array<{ id?: string | null; item: string }> | null
+  technologies?: Array<{ id?: string | null; technology: string }> | null
 }
 
 function Summary({ summary }: { summary?: SerializedEditorState | string | null }) {
@@ -61,6 +62,13 @@ export function AnimatedTimeline({ items }: AnimatedTimelineProps) {
               <ul className="highlight-list">
                 {item.highlights.slice(0, 3).map((h) => (
                   <li key={h.id ?? h.item}>{h.item}</li>
+                ))}
+              </ul>
+            )}
+            {!!item.technologies?.length && (
+              <ul className="tag-list" aria-label={`${item.role} technologies`}>
+                {item.technologies.map((t) => (
+                  <li key={t.id ?? t.technology}>{t.technology}</li>
                 ))}
               </ul>
             )}

@@ -1446,6 +1446,10 @@ h3 {
   margin-top: 16px;
 }
 
+.timeline-item .tag-list {
+  margin-top: 16px;
+}
+
 .site-footer {
   background: var(--canvas);
   border-top: 1px solid var(--line);
@@ -1817,6 +1821,10 @@ h3 {
     text-align: center;
   }
 
+  .footer-left {
+    justify-items: center;
+  }
+
   .footer-right {
     justify-items: center;
   }
@@ -1939,6 +1947,27 @@ h3 {
   pointer-events: none;
   position: absolute;
   z-index: 0;
+}
+
+.stage-strands {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
+
+/* Dimming overlay above the strands so the headline stays readable.
+   --strands-dim = overall darkness (0..1), --strands-dim-center = extra
+   darkness behind the centred text. */
+.stage-strands::after {
+  --strands-dim: 0.35;
+  --strands-dim-center: 0.5;
+  background:
+    radial-gradient(55% 45% at 50% 50%, rgba(11, 11, 12, var(--strands-dim-center)), transparent 100%),
+    rgba(11, 11, 12, var(--strands-dim));
+  content: '';
+  inset: 0;
+  position: absolute;
 }
 
 .stage-floaters {
