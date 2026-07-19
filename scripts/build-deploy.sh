@@ -24,10 +24,14 @@ if [ -d "migrations" ]; then
 fi
 
 # Copy packages that Next.js standalone sometimes misses
-for pkg in @swc/helpers; do
-  if [ -d "node_modules/$pkg" ]; then
+# (libsql ships native bindings the file tracer cannot follow; the platform
+# package for the Linux server is @libsql/linux-x64-gnu)
+for pkg in @swc/helpers libsql @libsql/client @libsql/core @libsql/hrana-client @libsql/isomorphic-fetch @libsql/isomorphic-ws @libsql/linux-x64-gnu @neon-rs/load detect-libc; do
+  if [ -d "node_modules/$pkg" ] || [ -d "node_modules/.pnpm/node_modules/$pkg" ]; then
+    src="node_modules/$pkg"
+    [ -d "$src" ] || src="node_modules/.pnpm/node_modules/$pkg"
     mkdir -p "$DEPLOY_DIR/node_modules/$pkg"
-    cp -r "node_modules/$pkg/." "$DEPLOY_DIR/node_modules/$pkg/"
+    cp -rL "$src/." "$DEPLOY_DIR/node_modules/$pkg/"
   fi
 done
 
