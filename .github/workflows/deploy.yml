@@ -39,8 +39,11 @@ jobs:
 
       - name: Upload to server
         run: |
+          # Recreate .env from secrets on every deploy, so it can never be lost on the server.
+          printf 'DATABASE_URL=file:/data05/virt114532/data/portfolio.db\nPAYLOAD_SECRET=%s\nNEXT_PUBLIC_SERVER_URL=https://alexeerma.ee\nSMTP_HOST=smtp.zone.eu\n' '${{ secrets.PAYLOAD_SECRET }}' > runtime.env
           rsync -vrm -e "ssh -o StrictHostKeyChecking=no" deploy.tar.gz ${{ secrets.SSH_LOGIN_CREDS }}:/data05/virt114532/domeenid/www.alexeerma.ee/htdocs/
+          rsync -vm -e "ssh -o StrictHostKeyChecking=no" runtime.env ${{ secrets.SSH_LOGIN_CREDS }}:/data05/virt114532/domeenid/www.alexeerma.ee/htdocs/.env
 
       - name: Extract and restart
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_LOGIN_CREDS }} "cd /data05/virt114532/domeenid/www.alexeerma.ee/htdocs && tar -xzf deploy.tar.gz --unlink-first --recursive-unlink -C . && (pm2 restart payload-portfolio --update-env || pm2 start pm2.config.js)"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_LOGIN_CREDS }} "cd /data05/virt114532/domeenid/www.alexeerma.ee/htdocs && tar -xzf deploy.tar.gz --unlink-first -C . && (pm2 restart payload-portfolio --update-env || pm2 start pm2.config.js)"
