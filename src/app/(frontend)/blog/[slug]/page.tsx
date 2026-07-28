@@ -69,10 +69,12 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const title = post.seo?.title || post.title || ''
   const description = post.seo?.description || post.excerpt || ''
   const ogImage = getMediaUrl(post.seo?.image) || getMediaUrl(post.coverImage)
+  const keywords = post.seo?.keywords?.map((k) => k.keyword).filter(Boolean)
 
   return {
     title,
     description,
+    keywords: keywords?.length ? keywords : undefined,
     alternates: { canonical: `${url}/blog/${slug}` },
     openGraph: {
       title,

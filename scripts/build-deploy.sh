@@ -15,6 +15,11 @@ cp -r "$STANDALONE" "$DEPLOY_DIR"
 cp -r .next/static "$DEPLOY_DIR/.next/static"
 cp -r public "$DEPLOY_DIR/public"
 
+# Apache on the server serves static files directly from htdocs root and does
+# not proxy unmatched paths, so public assets also need to sit at deploy root
+# (not just under public/) for things like /favicon.svg to resolve.
+cp -r public/. "$DEPLOY_DIR/"
+
 # PM2 config goes in the root of the deployed folder
 cp pm2.config.js "$DEPLOY_DIR/pm2.config.js"
 

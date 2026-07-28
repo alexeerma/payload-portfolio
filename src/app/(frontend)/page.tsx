@@ -147,10 +147,12 @@ export async function generateMetadata(): Promise<Metadata> {
     || (settings.name && settings.title ? `${settings.name} — ${settings.title}` : 'Developer Portfolio')
   const description = settings.seo?.description || settings.headline || settings.intro || ''
   const ogImage = getMediaUrl(settings.seo?.ogImage) || getMediaUrl(settings.heroImage)
+  const keywords = settings.seo?.keywords?.map((k) => k.keyword).filter(Boolean)
 
   return {
     title,
     description,
+    keywords: keywords?.length ? keywords : undefined,
     alternates: { canonical: url },
     openGraph: {
       title,

@@ -363,6 +363,15 @@ export interface Post {
      * Image shown when shared on social media. Recommended: 1200×630px.
      */
     image?: (number | null) | Media;
+    /**
+     * Short keywords/phrases search engines associate with this post.
+     */
+    keywords?:
+      | {
+          keyword: string;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -623,6 +632,12 @@ export interface PostsSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         image?: T;
+        keywords?:
+          | T
+          | {
+              keyword?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -756,6 +771,15 @@ export interface SiteSetting {
      * Image shown when your site is shared on social media. Recommended: 1200×630px.
      */
     ogImage?: (number | null) | Media;
+    /**
+     * Short keywords/phrases search engines associate with your homepage.
+     */
+    keywords?:
+      | {
+          keyword: string;
+          id?: string | null;
+        }[]
+      | null;
   };
   featuredProjects?: (number | Project)[] | null;
   /**
@@ -844,6 +868,12 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         ogImage?: T;
+        keywords?:
+          | T
+          | {
+              keyword?: T;
+              id?: T;
+            };
       };
   featuredProjects?: T;
   terminalLines?:

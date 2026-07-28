@@ -138,6 +138,22 @@ export const Posts: CollectionConfig = {
             description: 'Image shown when shared on social media. Recommended: 1200×630px.',
           },
         },
+        {
+          name: 'keywords',
+          type: 'array',
+          label: 'Meta Keywords',
+          admin: {
+            initCollapsed: true,
+            description: 'Short keywords/phrases search engines associate with this post.',
+          },
+          fields: [
+            {
+              name: 'keyword',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
       ],
     },
   ],
