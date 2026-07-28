@@ -200,7 +200,6 @@ export default async function HomePage() {
   const projects = projectsResult.docs.length ? projectsResult.docs : fallbackProjects
   const skills = skillsResult.docs.length ? skillsResult.docs : fallbackSkills
   const experience = experienceResult.docs.length ? experienceResult.docs : fallbackExperience
-  const heroImage = getMediaUrl(settings.heroImage) || '/portfolio-hero.png'
   const logoUrl = getMediaUrl(settings.logo)
   const resumeUrl = getMediaUrl(settings.resume) || settings.resumeUrl
   const heroStats = settings.heroStats?.length
@@ -237,7 +236,6 @@ export default async function HomePage() {
         email={settings.email}
         resumeUrl={resumeUrl}
         logoUrl={logoUrl}
-        avatarUrl={heroImage}
         socialLinks={settings.socialLinks}
         stats={heroStats}
         secondHeadline={settings.heroSecondStatement?.headline}

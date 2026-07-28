@@ -39,7 +39,6 @@ type HeroStageProps = {
   email?: string | null
   resumeUrl?: string | null
   logoUrl?: string | null
-  avatarUrl?: string | null
   socialLinks?: SocialLink[] | null
   stats: { label: string; value: string }[]
   secondHeadline?: string | null
@@ -64,7 +63,6 @@ export function HeroStage({
   email,
   resumeUrl,
   logoUrl,
-  avatarUrl,
   socialLinks,
   stats,
   secondHeadline,
@@ -242,11 +240,6 @@ export function HeroStage({
       </div>
 
       <div className="stage-avatar">
-        {avatarUrl && (
-          <span className="stage-avatar-img">
-            <Image alt="" fill sizes="44px" src={avatarUrl} />
-          </span>
-        )}
         <span className="stage-avatar-line">{availability || intro}</span>
       </div>
 
